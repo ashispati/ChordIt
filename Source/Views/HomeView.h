@@ -1,29 +1,35 @@
 /*
   ==============================================================================
 
-    AppView.h
-    Created: 28 Mar 2016 7:13:50pm
+    HomeView.h
+    Created: 28 Mar 2016 8:15:40pm
     Author:  Ashis Pati
 
   ==============================================================================
 */
 
-#ifndef APPVIEW_H_INCLUDED
-#define APPVIEW_H_INCLUDED
+#ifndef HOMEVIEW_H_INCLUDED
+#define HOMEVIEW_H_INCLUDED
 
 #include "JuceHeader.h"
 
 class MainAppWindow;
 
-class AppView : public Component, public Button::Listener
+class HomeView : public Component, public Button::Listener
 {
 private:
     MainAppWindow* _main_app_window;
+    GroupComponent _group_component; // for title currently
+
+    // buttons and other elements
     TextButton _enter_button;
     
+    // Constants for drawing purposes
+    const int PADDING = 20;
+    
 public:
-    AppView (MainAppWindow* window);
-    virtual ~AppView();
+    HomeView (MainAppWindow* window);
+    virtual ~HomeView();
     
     void paint (Graphics& g) override;
     void resized () override;
@@ -33,5 +39,4 @@ public:
 };
 
 
-
-#endif  // APPVIEW_H_INCLUDED
+#endif  // HOMEVIEW_H_INCLUDED
