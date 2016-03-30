@@ -11,6 +11,7 @@
 #include "JuceHeader.h"
 
 #include "MainWindow.h"
+#include "HomeView.h"
 #include "AppView.h"
 
 MainAppWindow::MainAppWindow()
@@ -23,7 +24,7 @@ MainAppWindow::MainAppWindow()
     
     setSize(960,640);
     
-    _current_view = new AppView(this);
+    _current_view = new HomeView(this);
     setContentOwned(_current_view, false);
     setVisible(true);
 }
@@ -43,8 +44,8 @@ void MainAppWindow::switchToAppView() {
 }
 
 // Needs to be changed 
-void MainAppWindow::switchToRecordView() {
+void MainAppWindow::switchToHomeView() {
     clearContentComponent();
-    _current_view = new AppView(this);
+    _current_view = new HomeView(this);
     setContentOwned(_current_view, false);
 }
