@@ -19,7 +19,8 @@ public:
         mainWindow = 0;
     }
 
-    void systemRequestedQuit() override {
+    void systemRequestedQuit() override
+    {
         quit();
     }
 

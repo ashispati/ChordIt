@@ -18,7 +18,7 @@ public:
     
     void closeButtonPressed();
     
-    void switchToHomeView();
+    void switchToRecordView();
     void switchToAppView();
 };
 

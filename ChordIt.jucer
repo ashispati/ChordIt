@@ -5,46 +5,11 @@
               jucerVersion="4.1.0">
   <MAINGROUP id="SlWciY" name="ChordIt">
     <GROUP id="{D4C17CFF-5441-BE18-834D-972F7F2DBB65}" name="Source">
-      <GROUP id="{69BA3120-495B-4D87-3AF6-9B98A58980E5}" name="AudioEngine">
-        <FILE id="dB6KD8" name="AcfPitchTracker.cpp" compile="1" resource="0"
-              file="Source/AudioEngine/AcfPitchTracker.cpp"/>
-        <FILE id="lm8emm" name="AcfPitchTracker.h" compile="0" resource="0"
-              file="Source/AudioEngine/AcfPitchTracker.h"/>
-        <FILE id="xTL5ZM" name="AudioEngine.cpp" compile="1" resource="0" file="Source/AudioEngine/AudioEngine.cpp"/>
-        <FILE id="daliFH" name="AudioEngine.h" compile="0" resource="0" file="Source/AudioEngine/AudioEngine.h"/>
-        <FILE id="xJkJCo" name="PitchTracker.cpp" compile="1" resource="0"
-              file="Source/AudioEngine/PitchTracker.cpp"/>
-        <FILE id="zZTp0A" name="PitchTracker.h" compile="0" resource="0" file="Source/AudioEngine/PitchTracker.h"/>
-        <FILE id="bKODV9" name="PlaybackSynth.cpp" compile="1" resource="0"
-              file="Source/AudioEngine/PlaybackSynth.cpp"/>
-        <FILE id="YFSx4P" name="PlaybackSynth.h" compile="0" resource="0" file="Source/AudioEngine/PlaybackSynth.h"/>
-        <FILE id="simbK0" name="RingBuffer.cpp" compile="1" resource="0" file="Source/AudioEngine/RingBuffer.cpp"/>
-        <FILE id="XX4uo4" name="RingBuffer.h" compile="0" resource="0" file="Source/AudioEngine/RingBuffer.h"/>
-      </GROUP>
-      <GROUP id="{8D3D26E4-F525-B3B8-AA7B-9BE510A3A541}" name="Controllers">
-        <FILE id="Y39J6M" name="MainController.cpp" compile="1" resource="0"
-              file="Source/Controllers/MainController.cpp"/>
-        <FILE id="LVWzDL" name="MainController.h" compile="0" resource="0"
-              file="Source/Controllers/MainController.h"/>
-      </GROUP>
-      <GROUP id="{28C12498-8DBD-0256-C689-2AB652F80314}" name="LookAndFeel">
-        <FILE id="fXM5Re" name="CustomLookAndFeel.cpp" compile="1" resource="0"
-              file="Source/LookAndFeel/CustomLookAndFeel.cpp"/>
-        <FILE id="JoyaDj" name="CustomLookAndFeel.h" compile="0" resource="0"
-              file="Source/LookAndFeel/CustomLookAndFeel.h"/>
-      </GROUP>
-      <GROUP id="{7F715F19-5DBF-61BC-EADA-A502E7B791EA}" name="Views">
-        <FILE id="pjij0k" name="AppComponent.cpp" compile="1" resource="0"
-              file="Source/Views/AppComponent.cpp"/>
-        <FILE id="wlGUho" name="AppComponent.h" compile="0" resource="0" file="Source/Views/AppComponent.h"/>
-        <FILE id="AUkVS4" name="AppView.cpp" compile="1" resource="0" file="Source/Views/AppView.cpp"/>
-        <FILE id="RPaDxl" name="AppView.h" compile="0" resource="0" file="Source/Views/AppView.h"/>
-        <FILE id="X1XpOX" name="HomeView.cpp" compile="1" resource="0" file="Source/Views/HomeView.cpp"/>
-        <FILE id="ObAjT4" name="HomeView.h" compile="0" resource="0" file="Source/Views/HomeView.h"/>
-        <FILE id="bjZTsH" name="Main.cpp" compile="1" resource="0" file="Source/Views/Main.cpp"/>
-        <FILE id="Sro0ZV" name="MainWindow.cpp" compile="1" resource="0" file="Source/Views/MainWindow.cpp"/>
-        <FILE id="lzk1KB" name="MainWindow.h" compile="0" resource="0" file="Source/Views/MainWindow.h"/>
-      </GROUP>
+      <FILE id="WwgtM0" name="AppView.cpp" compile="1" resource="0" file="Source/AppView.cpp"/>
+      <FILE id="VwdxZ2" name="AppView.h" compile="0" resource="0" file="Source/AppView.h"/>
+      <FILE id="GSJn88" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
+      <FILE id="txf3OU" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="Xr47dK" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
