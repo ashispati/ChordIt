@@ -12,7 +12,7 @@
 #define APPVIEW_H_INCLUDED
 
 #include "JuceHeader.h"
-#include "AppComponent.h"
+//#include "AppComponent.h"
 #include "CustomLookAndFeel.h"
 #include "MainController.h"
 
@@ -25,13 +25,14 @@ private:
     
     // Components
     GroupComponent _group_component; // for title currently
-    AppComponent* _app_component; //for app GUI
+    
     
     // Controller
     MainController* _controller;
     
-    // buttons and other elements
+    // Buttons and other elements
     TextButton _back_button;
+    TextButton _record_button;
     
     // Look and Feel
     CustomLookAndFeel _custom_look_and_feel;
@@ -40,7 +41,7 @@ private:
     const int PADDING = 20;
     
 public:
-    AppView (MainAppWindow* window);
+    AppView (MainAppWindow* window, int tempo, int key);
     virtual ~AppView();
     
     // Component Methods
@@ -51,8 +52,6 @@ public:
     void buttonClicked (Button* button) override;
     
     // Class Specific Methods
-    AppComponent* getAppComponent();
-    
     void setBackButtonStatus(bool is_recording);
     void setRecordButton(bool is_recording);
     

@@ -5,6 +5,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 
+class MainController;
 
 class MainAppWindow  : public DocumentWindow {
 private:
@@ -19,7 +20,7 @@ public:
     void closeButtonPressed();
     
     void switchToHomeView();
-    void switchToAppView();
+    void switchToAppView(int tempo, int key);
 };
 
 

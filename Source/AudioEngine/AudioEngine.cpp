@@ -35,7 +35,7 @@ AudioEngine::~AudioEngine()
     delete _device_manager;
     delete _audio_player;
     delete _ring_buffer;
-    delete _pitch_tracker;
+    PitchTracker::destroy(_pitch_tracker);
     delete _synth;
 }
 
@@ -63,7 +63,7 @@ void AudioEngine::prepareToPlay(int samples_per_block_expected, double sample_ra
     _sample_rate = sample_rate;
     _num_samples_per_block = samples_per_block_expected;
     if(_pitch_tracker != NULL) {
-        delete _pitch_tracker;
+        PitchTracker::destroy(_pitch_tracker);
     }
     PitchTracker::create(_pitch_tracker, 0, _sample_rate, _window_size);
 }
@@ -108,14 +108,27 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
         while (_channel_data_avg.size() >= hop_size) {
             _ring_buffer->addNextBufferToFrame(_channel_data_avg);
             float midi_pitch_of_window = _pitch_tracker->findPitchInMidi(_ring_buffer);
-            cout << midi_pitch_of_window << endl;
+            if (_controller.getRecordingTime() >= 0) {
+                cout << midi_pitch_of_window << endl;
+                _controller.pushPitchToModel(midi_pitch_of_window);
+            }
             _channel_data_avg.erase(_channel_data_avg.begin(), _channel_data_avg.begin() + hop_size);
         }
         
         buffer_to_fill.clearActiveBufferRegion();
         
         // Update number of samples recorded
+        double curr_beat = _controller.getRecordingTime();
         _controller.addSamples(buffer_to_fill.numSamples);
+        double next_beat = _controller.getRecordingTime();
+        
+        if (next_beat < 0 && next_beat >= -_controller.getTimeSignatureNumerator() ) {
+            playReferencePitch(buffer_to_fill, buffer_to_fill.numSamples);
+        }
+        
+        if (floor(curr_beat) != floor(next_beat)) {
+            playMetronome(buffer_to_fill, floor(next_beat));
+        }
         
         delete channel_data;
     }
@@ -141,18 +154,61 @@ void AudioEngine::stopAudioCallBack() {
 }
 
 
-/*
- void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, int next_beat) {
+void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, int next_beat) {
+    const int HALF_WINDOW_LENGTH = 20;
+    const int WINDOW_LENGTH = HALF_WINDOW_LENGTH * 2;
+    
+    double frac = _controller.getRecordingTime() - next_beat;
+    float tempo = _controller.getTempo();
+    int num_samples_per_beat = _sample_rate * 60 / tempo;
+    
+    int downbeat = _controller.getTimeSignatureNumerator();
+    
+    int metronome_position = (_num_samples_per_block - static_cast<int>(frac * num_samples_per_beat)) % _num_samples_per_block;
+    jassert (isPositiveAndBelow(metronome_position, _num_samples_per_block));
+    
+    // Find the location to write the window. The window should be centered around the metronome location.
+    // If writing the window requires multiple blocks, we shift the window so it stays within the current
+    // block.
+    int start_position = metronome_position - HALF_WINDOW_LENGTH;
+    if(start_position < 0) {
+        start_position = 0;
+    }
+    int stop_position = start_position + WINDOW_LENGTH;
+    if(stop_position >= _num_samples_per_block) {
+        stop_position = _num_samples_per_block - 1;
+        start_position = stop_position - WINDOW_LENGTH;
+    }
+    
+    // Different gains for downbeat and other beats.
+    float gain = 0.8;
+    if(next_beat % downbeat == 0) {
+        gain = 0.45;
+    }
+    Logger::getCurrentLogger()->writeToLog("start: " + String(start_position) + ", stop: " + String(stop_position) + ".");
+    // Computing and writing the metronome waveform.
+    for(int sample_idx = start_position; sample_idx <= stop_position; sample_idx++) {
+        int waveform_idx = sample_idx - start_position;
+        float value = 0.5 * (1 - cos(2 * double_Pi * (waveform_idx) / WINDOW_LENGTH));
+        value = value * gain;
+        for(int channel_idx = 0; channel_idx < buffer_to_fill.buffer->getNumChannels(); channel_idx++) {
+            buffer_to_fill.buffer->addSample(channel_idx, sample_idx, value);
+        }
+    }
 }
 
-void AudioEngine::playReferencePitch(const juce::AudioSourceChannelInfo& buffer_to_fill) {
-    _synth->renderNextBlock(buffer_to_fill, 0, _num_samples_per_block);
+void AudioEngine::playReferencePitch(const juce::AudioSourceChannelInfo& buffer_to_fill, int num_samples) {
+    _synth->renderNextBlock(buffer_to_fill, 0, num_samples);
 }
 
-void AudioEngine::setPlaybackSynthFreq(double freq_in_hz) {
+void AudioEngine::setPlaybackSynthFreq(double freq_in_hz, int window_length_in_samples){
     _synth->updateAngleDelta(freq_in_hz);
+    _synth->clearWindow();
+    _synth->createNewWindow(window_length_in_samples);
+    _synth->setTailOff(1.0);
 }
 
+/*
 vector<float> AudioEngine::getNewPitches(int previous_pitch_idx) {
     return _pitch_tracker->getNewPitches(previous_pitch_idx);
 }

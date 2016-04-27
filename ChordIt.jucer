@@ -5,6 +5,12 @@
               jucerVersion="4.1.0">
   <MAINGROUP id="SlWciY" name="ChordIt">
     <GROUP id="{D4C17CFF-5441-BE18-834D-972F7F2DBB65}" name="Source">
+      <GROUP id="{4E4946B2-4E17-066E-A77F-33DB7513D49E}" name="Models">
+        <FILE id="TkKb81" name="RecordingModel.cpp" compile="1" resource="0"
+              file="Source/Models/RecordingModel.cpp"/>
+        <FILE id="piZSQ1" name="RecordingModel.h" compile="0" resource="0"
+              file="Source/Models/RecordingModel.h"/>
+      </GROUP>
       <GROUP id="{A7FFF09A-39DC-FB38-6032-9253F50210BD}" name="AudioEngine">
         <FILE id="XmYlFg" name="AcfPitchTracker.cpp" compile="1" resource="0"
               file="Source/AudioEngine/AcfPitchTracker.cpp"/>

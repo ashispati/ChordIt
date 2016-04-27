@@ -28,10 +28,8 @@ private:
     int findPeak(vector<float> auto_corr_aray);
     
 public:
-    AcfPitchTracker();
+    AcfPitchTracker(int window_size);
     ~AcfPitchTracker();
 };
-
-
 
 #endif  // ACFPITCHTRACKER_H_INCLUDED

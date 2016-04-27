@@ -13,6 +13,7 @@
 #include "MainWindow.h"
 #include "HomeView.h"
 #include "AppView.h"
+#include "MainController.h"
 
 MainAppWindow::MainAppWindow()
 : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
@@ -22,7 +23,7 @@ MainAppWindow::MainAppWindow()
     setUsingNativeTitleBar(true);
     ResizableWindow::setFullScreen(true);
     
-    setSize(960,640);
+    setSize(600,400);
     
     _current_view = new HomeView(this);
     setContentOwned(_current_view, false);
@@ -37,13 +38,12 @@ void MainAppWindow::closeButtonPressed() {
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
-void MainAppWindow::switchToAppView() {
+void MainAppWindow::switchToAppView(int tempo, int key) {
     clearContentComponent();
-    _current_view = new AppView(this);
+    _current_view = new AppView(this, tempo, key);
     setContentOwned(_current_view, false);
 }
 
-// Needs to be changed 
 void MainAppWindow::switchToHomeView() {
     clearContentComponent();
     _current_view = new HomeView(this);

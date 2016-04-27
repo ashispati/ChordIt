@@ -14,13 +14,13 @@
 
 using namespace std;
 
-PitchTracker::PitchTracker() {};
+PitchTracker::PitchTracker(int window_size) : _window_size(window_size) {};
 
 PitchTracker::~PitchTracker() {};
 
 void PitchTracker::create(PitchTracker*& pitch_tracker, int type, double sample_rate, int window_size) {
     if (type == 0) {
-        pitch_tracker = new AcfPitchTracker();
+        pitch_tracker = new AcfPitchTracker(window_size);
     }
     else {
         jassert("Invalid Pitch Tracker Type");
@@ -32,13 +32,16 @@ void PitchTracker::create(PitchTracker*& pitch_tracker, int type, double sample_
     if (window_size <= 0)
         jassert("Window Size must be a positive integer");
     
-    pitch_tracker->init(sample_rate, window_size);
+    pitch_tracker->init(sample_rate);
     
 }
 
-void PitchTracker::init(double sample_rate, int window_size) {
+void PitchTracker::destroy(PitchTracker*& pitch_tracker) {
+    delete pitch_tracker;
+}
+
+void PitchTracker::init(double sample_rate) {
     setSampleRate(sample_rate);
-    setWindowSize(window_size);
 }
 
 int PitchTracker::getSampleRate() {
@@ -70,10 +73,6 @@ float PitchTracker::getPitchAtIndex(int index) {
 
 void PitchTracker::setSampleRate(double sample_rate) {
     _sample_rate = sample_rate;
-}
-
-void PitchTracker::setWindowSize(int window_size) {
-    _window_size = window_size;
 }
 
 void PitchTracker::setMinFreqInHz(int min_freq_in_hz) {
@@ -121,4 +120,3 @@ vector<float> PitchTracker::getNewPitches(int previous_pitch_idx) {
     }
     return new_pitches;
 }
-

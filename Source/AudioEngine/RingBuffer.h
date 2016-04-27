@@ -24,7 +24,7 @@ private:
     const int _hop_size;
     int _read_position;
     int _write_position;
-
+    
     
 public:
     RingBuffer();

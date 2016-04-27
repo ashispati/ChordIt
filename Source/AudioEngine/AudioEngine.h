@@ -49,6 +49,10 @@ public:
     int getNumSamplesPerBlock() { return _num_samples_per_block; }
     void startAudioCallBack();
     void stopAudioCallBack();
+    
+    void playMetronome (const AudioSourceChannelInfo& buffer_to_fill, int next_beat);
+    void playReferencePitch(const juce::AudioSourceChannelInfo& buffer_to_fill, int num_samples);
+    void setPlaybackSynthFreq(double freq_in_hz, int window_length_in_samples);
 };
 
 

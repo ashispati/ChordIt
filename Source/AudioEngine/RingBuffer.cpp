@@ -12,7 +12,7 @@
 #include "RingBuffer.h"
 
 RingBuffer::RingBuffer()
-    : _window_size(1024), _hop_size(512)
+: _window_size(1024), _hop_size(512)
 {
     _write_position = _window_size - _hop_size;
     _read_position = _window_size - _hop_size;
@@ -21,7 +21,7 @@ RingBuffer::RingBuffer()
 }
 
 RingBuffer::RingBuffer(int window_size, int hop_size)
-    : _window_size(window_size), _hop_size(hop_size)
+: _window_size(window_size), _hop_size(hop_size)
 {
     if (_window_size < _hop_size) {
         jassert("Incorrect parameters for initialisation of buffer parameters");

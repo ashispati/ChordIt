@@ -12,21 +12,27 @@
 #include "MainController.h"
 #include "AudioEngine.h"
 #include "AppView.h"
+#include "RecordingModel.h"
 
-MainController::MainController(AppView* view) : _app_view(view), _is_recording(false), _num_samples_recorded(0) {
+MainController::MainController(AppView* view) :
+        _app_view(view), _is_recording(false), _num_samples_recorded(0) {
     _audio_engine = new AudioEngine(*this);
+            _cur_recording_model = NULL;
 }
 
 MainController::~MainController() {
     delete _audio_engine;
+    delete _cur_recording_model;
 }
 
 void MainController::startRecording() {
     if (_is_recording) {
         return;
     }
-    resetRecording();
     _is_recording = true;
+    resetRecordingModel();
+    resetRecording();
+    resetPlaybackSynth();
     _audio_engine->startAudioCallBack();
     _app_view->setRecordButton(_is_recording);
     _app_view->setBackButtonStatus(_is_recording);
@@ -38,6 +44,7 @@ void MainController::stopRecording() {
     }
     _is_recording = false;
     _audio_engine->stopAudioCallBack();
+    _cur_recording_model->enableProcessing();
     _app_view->setRecordButton(_is_recording);
     _app_view->setBackButtonStatus(_is_recording);
 }
@@ -51,5 +58,75 @@ void MainController::addSamples(int num_samples) {
 }
 
 void MainController::resetRecording() {
-    _num_samples_recorded = 0;
+    _num_samples_recorded = -getCountInDurationInSamples();
+    
+}
+
+double MainController::getRecordingTime() {
+    double sample_rate = _audio_engine->getSampleRate();
+    double cur_time_seconds = _num_samples_recorded / sample_rate;
+    double beats_per_second = _tempo / 60;
+    double cur_time_beats = beats_per_second * cur_time_seconds;
+    return cur_time_beats;
+}
+
+int MainController::getCountInDurationInSamples() {
+    int num_samples_per_beat = _audio_engine->getSampleRate() * 60 / _tempo;
+    return (_time_signature_numerator + 0.5) * num_samples_per_beat;
+}
+
+void MainController::resetPlaybackSynth() {
+    double key_in_midi = static_cast<double> (60 + _key);
+    double key_in_freq =  440 * pow(2.0, (key_in_midi - 69)/12);
+    
+    double sample_rate = _audio_engine->getSampleRate();
+    float time_seconds = static_cast<float> (_time_signature_numerator) * 60 / _tempo;
+    int window_length_in_samples = sample_rate * time_seconds - _audio_engine->getNumSamplesPerBlock();
+    
+    _audio_engine->setPlaybackSynthFreq(key_in_freq, window_length_in_samples);
+}
+
+void MainController::resetRecordingModel() {
+    if (_cur_recording_model != NULL) {
+        delete _cur_recording_model;
+        _cur_recording_model = NULL;
+    }
+    _cur_recording_model = new RecordingModel(_tempo, _time_signature_numerator, _time_signaure_denominator, _audio_engine->getHopSize());
+    _cur_recording_model->disableProcessing();
+}
+
+void MainController::pushPitchToModel(float pitch_midi) {
+    _cur_recording_model->pushPitchToModel(pitch_midi);
+}
+
+void MainController::setTempo(int tempo) {
+    _tempo = tempo;
+}
+
+void MainController::setKey(int key) {
+    _key = key;
+}
+
+int MainController::getTempo() const {
+    return _tempo;
+}
+
+int MainController::getKey() const {
+    return _key;
+}
+
+void MainController::setTimeSignatureNumerator(int numerator) {
+    _time_signature_numerator = numerator;
+}
+
+void MainController::setTimeSignatureDenominator(int denominator) {
+    _time_signaure_denominator = denominator;
+}
+
+int MainController::getTimeSignatureNumerator() const {
+    return _time_signature_numerator;
+}
+
+int MainController::getTimeSignatureDenominator() const {
+    return _time_signaure_denominator;
 }

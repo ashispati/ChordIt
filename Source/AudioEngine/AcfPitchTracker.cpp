@@ -15,9 +15,8 @@
 
 using namespace std;
 
-AcfPitchTracker::AcfPitchTracker()
+AcfPitchTracker::AcfPitchTracker(int window_size) : PitchTracker(window_size)
 {
-    setWindowSize(1024);
     setSampleRate(44100);
     setMinFreqInHz(80);
     setMaxFreqInHz(1000);
@@ -28,7 +27,7 @@ AcfPitchTracker::~AcfPitchTracker() {};
 float AcfPitchTracker::findPitchInHz(RingBuffer* window)
 {
     int read_position = window->getReadPosition();
-    float current_frame[_window_size];
+    float* current_frame = (float*) malloc(_window_size * sizeof(float));
     float rms_value = window->rmsOfWindow();
     float energy_window = rms_value*rms_value*_window_size;
     if (rms_value < 0.005)
@@ -48,6 +47,8 @@ float AcfPitchTracker::findPitchInHz(RingBuffer* window)
         _pitch_array_in_hz.push_back(pitch_in_hz);
         return pitch_in_hz;
     }
+    
+    delete current_frame;
 }
 
 vector<float> AcfPitchTracker::smoothAutoCorr(vector<float> auto_corr_array)
