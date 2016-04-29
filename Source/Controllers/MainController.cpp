@@ -45,6 +45,35 @@ void MainController::stopRecording() {
     _is_recording = false;
     _audio_engine->stopAudioCallBack();
     _cur_recording_model->enableProcessing();
+    
+    
+    // test code
+    int num_measures_recorded = _cur_recording_model->getSizeOfMelodyObsMatrix();
+    float **melody_obs_mat = 0;
+    melody_obs_mat = new float*[num_measures_recorded];
+    for (int i = 0; i < num_measures_recorded; i++) {
+        melody_obs_mat[i] = new float[12];
+    }
+    
+    for (int i = 0; i < num_measures_recorded; i++) {
+        for (int j = 0; j < 12; j++) {
+            melody_obs_mat[i][j] = 0;
+        }
+    }
+    
+    _cur_recording_model->computeMelodyObsMatrix(melody_obs_mat);
+    
+    
+    for (int i = 0; i < num_measures_recorded; i++) {
+        delete[] melody_obs_mat[i];
+    }
+    delete[] melody_obs_mat;
+    melody_obs_mat = 0;
+    
+    // test code ends
+    
+    
+    
     _cur_recording_model->writePitchesToFile();
     _app_view->setRecordButton(_is_recording);
     _app_view->setBackButtonStatus(_is_recording);
