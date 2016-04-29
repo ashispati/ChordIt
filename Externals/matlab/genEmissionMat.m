@@ -20,3 +20,9 @@ while ischar(line)
     end
     line = fgetl(fid);
 end
+
+emission_mat(emission_mat == 0) = 0.1;
+
+for i = 1:dim_1
+emission_mat(i,:) = emission_mat(i,:)./norm(emission_mat(i,:),1);
+end
