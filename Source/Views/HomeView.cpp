@@ -20,7 +20,7 @@ using namespace juce;
 HomeView::HomeView (MainAppWindow* window) : _main_app_window(window){
     
     _tempo = 90;
-    _key = -1;
+    _root = -1;
     
     // Set Title
     _group_component.setColour(GroupComponent::textColourId, Colours::darkred);
@@ -112,9 +112,9 @@ void HomeView::resized () {
 
 void HomeView::buttonClicked (Button* button) {
     if (button == &_enter_button) {
-        cout << "Final Selected Key is " << _key << endl;
+        cout << "Final Selected Key is " << _root << endl;
         cout << "Final Selected Tempo is " << _tempo << endl;
-        _main_app_window->switchToAppView(_tempo, _key);
+        _main_app_window->switchToAppView(_tempo, _root);
     }
 }
 
@@ -122,12 +122,12 @@ void HomeView::buttonClicked (Button* button) {
 void HomeView::comboBoxChanged(ComboBox *combo_box) {
     if (combo_box == &_key_combo_box) {
         if (combo_box->getSelectedItemIndex() >= 0) {
-            _key = combo_box->getSelectedItemIndex();
-            cout << "Selected key is " << _key << endl;
+            _root = combo_box->getSelectedItemIndex();
+            cout << "Selected key is " << _root << endl;
             // set key in controller;
         }
     }
-    if (_key >= 0) {
+    if (_root >= 0) {
         _enter_button.setEnabled(true);
     }
     else {

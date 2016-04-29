@@ -108,9 +108,9 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
         while (_channel_data_avg.size() >= hop_size) {
             _ring_buffer->addNextBufferToFrame(_channel_data_avg);
             float midi_pitch_of_window = _pitch_tracker->findPitchInMidi(_ring_buffer);
-            if (_controller.getRecordingTime() >= 0) {
+            if (_controller.getRecordingTimeInBeats() >= 0) {
                 cout << midi_pitch_of_window << endl;
-                _controller.pushPitchToModel(midi_pitch_of_window);
+                _controller.pushPitchToModel(midi_pitch_of_window, _controller.getRecordingTimeInBeats());
             }
             _channel_data_avg.erase(_channel_data_avg.begin(), _channel_data_avg.begin() + hop_size);
         }
@@ -118,9 +118,9 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
         buffer_to_fill.clearActiveBufferRegion();
         
         // Update number of samples recorded
-        double curr_beat = _controller.getRecordingTime();
+        double curr_beat = _controller.getRecordingTimeInBeats();
         _controller.addSamples(buffer_to_fill.numSamples);
-        double next_beat = _controller.getRecordingTime();
+        double next_beat = _controller.getRecordingTimeInBeats();
         
         if (next_beat < 0 && next_beat >= -_controller.getTimeSignatureNumerator() ) {
             playReferencePitch(buffer_to_fill, buffer_to_fill.numSamples);
@@ -158,7 +158,7 @@ void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, in
     const int HALF_WINDOW_LENGTH = 20;
     const int WINDOW_LENGTH = HALF_WINDOW_LENGTH * 2;
     
-    double frac = _controller.getRecordingTime() - next_beat;
+    double frac = _controller.getRecordingTimeInBeats() - next_beat;
     float tempo = _controller.getTempo();
     int num_samples_per_beat = _sample_rate * 60 / tempo;
     

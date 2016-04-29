@@ -13,6 +13,8 @@
 
 #include <vector>
 
+#include "../JuceLibraryCode/JuceHeader.h"
+
 using namespace std;
 
 class RecordingModel {
@@ -21,17 +23,22 @@ private:
     int _time_signature_numerator;
     int _time_signature_denominator;
     int _block_length_in_samples;
+    int _sampling_rate;
+    int _root;
     bool _is_ready_to_process;
     vector<float> _pitch_data_midi;
+    vector<int> _beat;
     
 public:
-    RecordingModel(int tempo, int tim_sig_numerator, int time_sig_denominator, int block_length);
+    RecordingModel(int tempo, int tim_sig_numerator, int time_sig_denominator, int block_length, int sampling_rate, int root);
     ~RecordingModel();
     
-    void pushPitchToModel(float pitch_midi);
+    void pushPitchToModel(float pitch_midi, int beat);
     void segmentPitchToMelody();
     void enableProcessing();
     void disableProcessing();
+    
+    void writePitchesToFile();
     
     // Getter and setters
     /*

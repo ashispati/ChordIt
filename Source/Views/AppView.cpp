@@ -15,7 +15,7 @@ AppView::AppView (MainAppWindow* window, int tempo, int key) : _main_app_window(
     
     _controller = new MainController(this);
     _controller->setTempo(tempo);
-    _controller->setKey(key);
+    _controller->setRootNote(key);
     
     //LookAndFeel::setDefaultLookAndFeel (&_custom_look_and_feel);
     

@@ -35,7 +35,7 @@ private:
     int PADDING = 10;
     
     // Variables for tempo and key
-    int _key = -1;
+    int _root = -1;
     int _tempo = 0;
     
     const String description = "Welcome to ChordIt, Select the tempo and key you want to use";

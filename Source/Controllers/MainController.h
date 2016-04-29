@@ -29,7 +29,7 @@ private:
     
     // Tempo & Key Information
     int _tempo;
-    int _key;
+    int _root;
     int _time_signature_numerator = 4;
     int _time_signaure_denominator = 4;
     
@@ -48,17 +48,17 @@ public:
     bool isRecording();
     void addSamples(int num_samples);
     void resetRecording();
-    double getRecordingTime();
+    double getRecordingTimeInBeats();
     int getCountInDurationInSamples();
     void resetPlaybackSynth();
     void resetRecordingModel();
-    void pushPitchToModel(float pitch_midi);
+    void pushPitchToModel(float pitch_midi, int beat);
     
     // Getter and setter
     void setTempo(int tempo);
-    void setKey(int key);
+    void setRootNote(int key);
     int getTempo() const;
-    int getKey() const;
+    int getRootNote() const;
     void setTimeSignatureNumerator(int numerator);
     void setTimeSignatureDenominator (int denominator);
     int getTimeSignatureNumerator() const;
