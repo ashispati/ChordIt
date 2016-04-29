@@ -46,7 +46,8 @@ def getKey(song):
 		c = c + 1
 	return mode, fifths	
 
-counter = 1
+counter_m = 1
+counter_M = 1
 for file in filenames:
 	tree = ET.parse(dir+file)
 	root = tree.getroot()
@@ -57,9 +58,17 @@ for file in filenames:
 	else:
 		# Segment based on 'part' tag
 		for part in root.iter('part'):
+			if(key_mode[part_num] == "major"):
+				f_chords = open('D:/Academics/Audio Software Engg/LeadSheets/major/chords/'+str(counter_M)+'_chord.txt','w')
+				f_notes = open('D:/Academics/Audio Software Engg/LeadSheets/major/notes/'+str(counter_M)+'_notes.txt','w')
+				counter_M = counter_M + 1
+			elif(key_mode[part_num] == "minor"):
+				f_chords = open('D:/Academics/Audio Software Engg/LeadSheets/minor/chords/'+str(counter_m)+'_chord.txt','w')
+				f_notes = open('D:/Academics/Audio Software Engg/LeadSheets/minor/notes/'+str(counter_m)+'_notes.txt','w')
+				counter_m = counter_m + 1
+			else:
+				continue
 			first_chord = True
-			f_chords = open('D:/Academics/Audio Software Engg/LeadSheets/chords/'+str(counter)+'_chord.txt','w')
-			f_notes = open('D:/Academics/Audio Software Engg/LeadSheets/notes/'+str(counter)+'_notes.txt','w')
 			# Write the key for the part in the first line of the chord file
 			f_chords.write(key_fifths[part_num]+ ' ' + key_mode[part_num]+ '\n')
 			# Check each measure for the presence of chords
@@ -98,6 +107,5 @@ for file in filenames:
 					notes = []
 				########################
 			part_num = part_num + 1
-			counter = counter + 1
 			f_chords.close()
 			f_notes.close()

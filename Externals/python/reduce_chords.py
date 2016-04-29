@@ -1,8 +1,11 @@
 import os
 
-dir = 'D:/Academics/Audio Software Engg/LeadSheets/chords/'
+#type = 'major'
+type = 'minor'
 
-output_dir = 'D:/Academics/Audio Software Engg/LeadSheets/reduced_chords/'
+dir = 'D:/Academics/Audio Software Engg/LeadSheets/' + type + '/chords/'
+
+output_dir = 'D:/Academics/Audio Software Engg/LeadSheets/' + type + '/reduced_chords/'
 filenames = os.listdir(dir)
 
 # maps all chord types to the 5 triad types: major, minor, augmented, diminished and suspended

@@ -1,6 +1,8 @@
 transitions_file = 'D:\Git Repos\ChordIt\Externals\python\chord_transitions.txt';
 
-transition_mat = zeros(62);
+dim = 62; % set to 45 for minor
+
+transition_mat = zeros(dim);
 fid = fopen(transitions_file);
 line = fgetl(fid);
 while ischar(line)
