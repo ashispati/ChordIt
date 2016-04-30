@@ -19,4 +19,4 @@ private:
 	float** _emission;
 	int _states;
 	int _observations;
-}
+};

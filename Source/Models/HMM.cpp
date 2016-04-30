@@ -25,7 +25,7 @@ HMM::~HMM()
 	delete[] _emission;
 }
 
-HMM::loadParams(string path_Tmat, string path_Emat)
+void HMM::loadParams(string path_Tmat, string path_Emat)
 {
 	ifstream infile_t, infile_e;
 	infile_t.open(path_Tmat, ios::in|ios::binary);
@@ -36,13 +36,18 @@ HMM::loadParams(string path_Tmat, string path_Emat)
 		infile_t.read(reinterpret_cast<char*>(&_transition[i][0]), _states * sizeof(float));
 		infile_e.read(reinterpret_cast<char*>(&_emission[i][0]), _observations* sizeof(float));
 	}
+	infile_t.close();
+	infile_e.close();
 }
 
-HMM::viterbi(float** observation_mat, int num_observations, int* seq)
+void HMM::viterbiDecode(float** observation_mat, int num_observations, int* seq)
 {
 	float **prob = new float*[num_observations+1];
 	float **obs_prob = new float*[num_observations];
 	int **prevs = new int*[num_observations+1];
+
+	int dmax = 0;
+	float pmax, p;
 	for (int i = 0; i <= num_observations; i++) 
 	{
 		prob[i] = new float[_states];
@@ -57,7 +62,7 @@ HMM::viterbi(float** observation_mat, int num_observations, int* seq)
 	
 	for (int i = 0; i < num_observations; i++)
 	{
-		obs_prob[i] = new float[states];
+		obs_prob[i] = new float[_states];
 		for (int j = 0; j < _states; j++)
 		{
 			obs_prob[i][j] = 0;
@@ -72,8 +77,7 @@ HMM::viterbi(float** observation_mat, int num_observations, int* seq)
 	{
 		for (int j = 0; j < _states; j++) 
 		{
-			double pmax = 0, p; 
-			int dmax;
+			pmax = 0;
 			for (int k = 0; k < _states; k++) 
 			{
 				p = prob[i-1][k] * _transition[k][j];
@@ -88,7 +92,7 @@ HMM::viterbi(float** observation_mat, int num_observations, int* seq)
 		}
 	}
 	
-	double pmax = 0; int dmax;
+	pmax = 0;
 	for (int i = 0; i < _states; i++) 
 	{
 		if (prob[num_observations][i] > pmax) 
@@ -104,7 +108,7 @@ HMM::viterbi(float** observation_mat, int num_observations, int* seq)
 		seq[i] = prevs[i+1][ seq[i+1] ];
 	}
 	
-	for (int i = 0; i < n; i++) 
+	for (int i = 0; i < num_observations; i++) 
 	{
 		delete[] prob[i];
 		delete[] prevs[i];
@@ -112,4 +116,4 @@ HMM::viterbi(float** observation_mat, int num_observations, int* seq)
 	delete[] prob;
 	delete[] prevs;
 	
-]}
+}
