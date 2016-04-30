@@ -17,21 +17,14 @@ AppView::AppView (MainAppWindow* window, int tempo, int key) : _main_app_window(
     _controller->setTempo(tempo);
     _controller->setRootNote(key);
     
-    //LookAndFeel::setDefaultLookAndFeel (&_custom_look_and_feel);
+    LookAndFeel::setDefaultLookAndFeel (&_custom_look_and_feel);
     
     // Set Image Component
-    const File file (File::getSpecialLocation(File::userDesktopDirectory).getChildFile("Image.JPG"));
-    _image = ImageFileFormat::loadFrom(file);
+    _image = ImageFileFormat::loadFrom(BinaryData::background2_jpg, (size_t)BinaryData::background2_jpgSize);
     if (_image.isValid()) {
         _background.setImage(_image);
     }
     addAndMakeVisible(_background);
-    
-    // Set Header Text
-    _group_component.setColour(GroupComponent::textColourId, Colours::darkred);
-    _group_component.setText("ChordIt");
-    _group_component.setTextLabelPosition(Justification::centredTop);
-    addAndMakeVisible(_group_component);
     
     // Set Back Button
     _back_button.setButtonText("Back");
@@ -64,10 +57,6 @@ void AppView::resized () {
     // Set Image Component
     _background.setBounds(0, 0, getWidth() , getHeight());
     
-    // Set Header Text
-    int width_of_group_comp = width/3;
-    int height_of_group_comp = height/20;
-    _group_component.setBounds((width - width_of_group_comp) / 2, 1*PADDING, width_of_group_comp, height_of_group_comp);
     
     // Set Record Button
     int button_width = width/10;

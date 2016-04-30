@@ -14,6 +14,7 @@
 #include "JuceHeader.h"
 
 #include "MainController.h"
+#include "CustomLookAndFeel.h"
 
 class MainAppWindow;
 
@@ -21,8 +22,13 @@ class HomeView : public Component, public Button::Listener, public ComboBox::Lis
 {
 private:
     MainAppWindow* _main_app_window;
-    GroupComponent _group_component; // for title currently
 
+    // Components
+    ImageComponent _background;
+    Image _image;
+
+    CustomLookAndFeel _custom_look_and_feel;
+    
     // Buttons and other elements
     TextButton _enter_button;
     Label _header_text;
@@ -37,8 +43,6 @@ private:
     // Variables for tempo and key
     int _root = -1;
     int _tempo = 0;
-    
-    const String description = "Welcome to ChordIt, Select the tempo and key you want to use";
     
     void assignItemsToRootNoteBox();
     

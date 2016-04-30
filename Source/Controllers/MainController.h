@@ -63,9 +63,6 @@ public:
     void setTimeSignatureDenominator (int denominator);
     int getTimeSignatureNumerator() const;
     int getTimeSignatureDenominator() const;
-    
-    
-    
 };
 
 

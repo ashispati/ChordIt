@@ -22,19 +22,23 @@ HomeView::HomeView (MainAppWindow* window) : _main_app_window(window){
     _tempo = 90;
     _root = -1;
     
-    // Set Title
-    _group_component.setColour(GroupComponent::textColourId, Colours::darkred);
-    _group_component.setText("ChordIt");
-    _group_component.setTextLabelPosition(Justification::centredTop);
-    addAndMakeVisible(_group_component);
+    LookAndFeel::setDefaultLookAndFeel(&_custom_look_and_feel);
+    
+    // Set Image Component
+    _image = ImageFileFormat::loadFrom(BinaryData::background1_jpg, (size_t)BinaryData::background1_jpgSize);
+    if (_image.isValid()) {
+        _background.setImage(_image);
+    }
+    addAndMakeVisible(_background);
     
     // Set Enter Button
-    _enter_button.setButtonText("Enter");
+    _enter_button.setButtonText("Start");
     _enter_button.addListener(this);
     _enter_button.setEnabled(false);
     addAndMakeVisible(_enter_button);
     
     //Set Root Note Combo Box
+    _key_label.setColour(Label::textColourId, Colours::mintcream);
     _key_label.setText("Select Root Note", dontSendNotification);
     _key_label.setJustificationType(Justification::left);
     addAndMakeVisible(_key_label);
@@ -49,6 +53,7 @@ HomeView::HomeView (MainAppWindow* window) : _main_app_window(window){
     addAndMakeVisible(_key_combo_box);
     
     //Set Tempo Editor Box
+    _bpm_label.setColour(Label::textColourId, Colours::mintcream);
     _bpm_label.setText("Enter BPM", dontSendNotification);
     _bpm_label.setJustificationType(Justification::left);
     addAndMakeVisible(_bpm_label);
@@ -77,23 +82,14 @@ void HomeView::assignItemsToRootNoteBox() {
 
 void HomeView::paint(juce::Graphics &g) {
     g.fillAll (Colours::white);
-    
-    int width = getWidth();
-    int height = getHeight();
-    
-    // draw intro text
-    g.setColour(Colours::black);
-    g.drawText(description, PADDING, height/4 - PADDING, width - 2*PADDING, 2*PADDING, Justification::centred);
 }
 
 void HomeView::resized () {
     int width = getWidth();
     int height = getHeight();
     
-    //Set Group Component
-    int width_of_group_comp = width/3;
-    int height_of_group_comp = height/20;
-    _group_component.setBounds((width - width_of_group_comp) / 2, 4*PADDING, width_of_group_comp, height_of_group_comp);
+    // Set Image Component
+    _background.setBounds(0, 0, getWidth() , getHeight());
     
     //Set Enter Button
     int width_enter_button = width/10;

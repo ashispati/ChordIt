@@ -4,8 +4,14 @@
               bundleIdentifier="com.yourcompany.ChordIt" includeBinaryInAppConfig="1"
               jucerVersion="4.1.0">
   <MAINGROUP id="SlWciY" name="ChordIt">
+    <GROUP id="{C8D5802D-66FF-52CD-4294-E0541B1C363F}" name="Resources">
+      <FILE id="KSR4H0" name="background1.jpg" compile="0" resource="1" file="Resources/background1.jpg"/>
+      <FILE id="OXNqn2" name="background2.jpg" compile="0" resource="1" file="Resources/background2.jpg"/>
+    </GROUP>
     <GROUP id="{D4C17CFF-5441-BE18-834D-972F7F2DBB65}" name="Source">
       <GROUP id="{4E4946B2-4E17-066E-A77F-33DB7513D49E}" name="Models">
+        <FILE id="kes09r" name="HMM.cpp" compile="1" resource="0" file="Source/Models/HMM.cpp"/>
+        <FILE id="W8FN7P" name="HMM.h" compile="0" resource="0" file="Source/Models/HMM.h"/>
         <FILE id="TkKb81" name="RecordingModel.cpp" compile="1" resource="0"
               file="Source/Models/RecordingModel.cpp"/>
         <FILE id="piZSQ1" name="RecordingModel.h" compile="0" resource="0"

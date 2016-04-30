@@ -15,6 +15,7 @@
 //#include "AppComponent.h"
 #include "CustomLookAndFeel.h"
 #include "MainController.h"
+#include "CustomLookAndFeel.h"
 
 class MainAppWindow;
 
@@ -24,10 +25,11 @@ private:
     MainAppWindow* _main_app_window;
     
     // Components
-    GroupComponent _group_component; // for title currently
     ImageComponent _background;
     Image _image;
     
+    // Look and Feel
+    CustomLookAndFeel _custom_look_and_feel;
     
     // Controller
     MainController* _controller;
@@ -35,9 +37,6 @@ private:
     // Buttons and other elements
     TextButton _back_button;
     TextButton _record_button;
-    
-    // Look and Feel
-    CustomLookAndFeel _custom_look_and_feel;
     
      // Constants for drawing purposes
     const int PADDING = 20;
