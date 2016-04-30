@@ -46,60 +46,6 @@ void RecordingModel::disableProcessing() {
     _is_ready_to_process = false;
 }
 
-void RecordingModel::writePitchesToFile() {
-    if (_is_ready_to_process) {
-        const File file (File::getSpecialLocation(File::userDesktopDirectory).getChildFile("pitches.txt"));
-        if (file.deleteFile()) {
-            file.getSpecialLocation(File::userDesktopDirectory).getChildFile("pitches.txt");
-        }
-        
-        FileOutputStream stream(file);
-        if (!stream.openedOk()) {
-            Logger::getCurrentLogger()->writeToLog("Failed to open stream");
-        }
-        else {
-            stream. setPosition(stream.getPosition());
-            
-            stream.writeText(String(_tempo), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            stream.writeText(String(_time_signature_numerator), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            stream.writeText(String(_time_signature_denominator), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            stream.writeText(String(_block_length_in_samples), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            stream.writeText(String(_sampling_rate), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            stream.writeText(String(_root), false, false);
-            stream.writeText(NewLine::getDefault(), false, false);
-            
-            for (int i = 0; i < _pitch_data_midi.size(); i++) {
-                float data = _pitch_data_midi[i];
-                stream.writeText(String(data) + " ", false, false);
-            }
-            stream.writeText(NewLine::getDefault(), false, false);
-            
-            for (int i = 0; i < _beat_data.size(); i++) {
-                int data = _beat_data[i];
-                stream.writeText(String(data) + " ", false, false);
-            }
-            
-            stream.writeText(NewLine::getDefault(), false, false);
-            for (int i = 0; i < _measure_data.size(); i++) {
-                int data = _measure_data[i];
-                stream.writeText(String(data) + " ", false, false);
-            }
-            
-            stream.writeText(NewLine::getDefault(), false, false);
-            
-            Logger::getCurrentLogger()->writeToLog("Exported recording data to text file");
-        }
-    }
-    else {
-        return;
-    }
-}
-
 
 // Methods for melody vector extraction
 float RecordingModel::getMinMeanSqErrOffset() {
@@ -240,6 +186,60 @@ void RecordingModel::computeMelodyObsMatrix(float** melody_obs_mat) {
     normalizeMelodyObsMatrix(melody_obs_mat);
 }
 
+
+void RecordingModel::writePitchesToFile() {
+    if (_is_ready_to_process) {
+        const File file (File::getSpecialLocation(File::userDesktopDirectory).getChildFile("pitches.txt"));
+        if (file.deleteFile()) {
+            file.getSpecialLocation(File::userDesktopDirectory).getChildFile("pitches.txt");
+        }
+        
+        FileOutputStream stream(file);
+        if (!stream.openedOk()) {
+            Logger::getCurrentLogger()->writeToLog("Failed to open stream");
+        }
+        else {
+            stream. setPosition(stream.getPosition());
+            
+            stream.writeText(String(_tempo), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            stream.writeText(String(_time_signature_numerator), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            stream.writeText(String(_time_signature_denominator), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            stream.writeText(String(_block_length_in_samples), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            stream.writeText(String(_sampling_rate), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            stream.writeText(String(_root), false, false);
+            stream.writeText(NewLine::getDefault(), false, false);
+            
+            for (int i = 0; i < _pitch_data_midi.size(); i++) {
+                float data = _pitch_data_midi[i];
+                stream.writeText(String(data) + " ", false, false);
+            }
+            stream.writeText(NewLine::getDefault(), false, false);
+            
+            for (int i = 0; i < _beat_data.size(); i++) {
+                int data = _beat_data[i];
+                stream.writeText(String(data) + " ", false, false);
+            }
+            
+            stream.writeText(NewLine::getDefault(), false, false);
+            for (int i = 0; i < _measure_data.size(); i++) {
+                int data = _measure_data[i];
+                stream.writeText(String(data) + " ", false, false);
+            }
+            
+            stream.writeText(NewLine::getDefault(), false, false);
+            
+            Logger::getCurrentLogger()->writeToLog("Exported recording data to text file");
+        }
+    }
+    else {
+        return;
+    }
+}
 
 /*
  void RecordingModel::setTimeSingatureNumerator(int num) {

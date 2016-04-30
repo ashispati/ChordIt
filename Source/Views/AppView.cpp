@@ -19,6 +19,14 @@ AppView::AppView (MainAppWindow* window, int tempo, int key) : _main_app_window(
     
     //LookAndFeel::setDefaultLookAndFeel (&_custom_look_and_feel);
     
+    // Set Image Component
+    const File file (File::getSpecialLocation(File::userDesktopDirectory).getChildFile("Image.JPG"));
+    _image = ImageFileFormat::loadFrom(file);
+    if (_image.isValid()) {
+        _background.setImage(_image);
+    }
+    addAndMakeVisible(_background);
+    
     // Set Header Text
     _group_component.setColour(GroupComponent::textColourId, Colours::darkred);
     _group_component.setText("ChordIt");
@@ -52,6 +60,9 @@ void AppView::paint(juce::Graphics &g) {
 void AppView::resized () {
     int width = getWidth();
     int height = getHeight();
+    
+    // Set Image Component
+    _background.setBounds(0, 0, getWidth() , getHeight());
     
     // Set Header Text
     int width_of_group_comp = width/3;

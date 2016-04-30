@@ -25,6 +25,8 @@ private:
     
     // Components
     GroupComponent _group_component; // for title currently
+    ImageComponent _background;
+    Image _image;
     
     
     // Controller
