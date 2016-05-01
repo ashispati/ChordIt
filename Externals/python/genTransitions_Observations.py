@@ -1,4 +1,5 @@
 import os
+import operator
 
 type = 'major'
 #type = 'minor'
@@ -25,7 +26,10 @@ def genDictofChords():
 	return chords
 
 chords = genDictofChords()
-print(len(chords))
+# sorted_x = sorted(chords.items(), key=operator.itemgetter(1))
+
+# for i in sorted_x:
+	# print(i)
 
 f_out_c = open('chord_transitions_'+ type + '.txt','w')
 f_out_n = open('note_observations_'+ type + '.txt','w')

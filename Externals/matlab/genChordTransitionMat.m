@@ -21,3 +21,8 @@ end
 for i = 1:dim
 transition_mat(i,:) = transition_mat(i,:)./norm(transition_mat(i,:),1);
 end
+
+transition_mat(2,:) = 0;
+fid = fopen('transition.bin','w');
+fwrite(fid, transition_mat', 'float');
+fclose(fid);

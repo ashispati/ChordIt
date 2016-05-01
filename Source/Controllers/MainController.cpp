@@ -13,11 +13,13 @@
 #include "AudioEngine.h"
 #include "AppView.h"
 #include "RecordingModel.h"
+#include "ChordSelectModel.h"
 
 MainController::MainController(AppView* view, MidiKeyboardState& state) :
         _app_view(view), _is_recording(false), _num_samples_recorded(0), _is_playing(false) {
     _audio_engine = new AudioEngine(*this, state);
     _cur_recording_model = NULL;
+	_chord_select_model = new ChordSelectModel(62, 12);
 }
 
 MainController::~MainController() {
@@ -157,7 +159,7 @@ void MainController::processRecording() {
     }
     
     computeMelodyObsMatrix(melody_obs_mat);
-    computeChordsFromMelody(melody_obs_mat);
+    computeChordsFromMelody(melody_obs_mat, num_measures_recorded);
     
     // Delete memory
     for (int i = 0; i < num_measures_recorded; i++) {
@@ -176,8 +178,43 @@ void MainController::computeMelodyObsMatrix(float** melody_obs_mat) {
      _cur_recording_model->computeMelodyObsMatrix(melody_obs_mat);
 }
 
-void MainController::computeChordsFromMelody(float **melody_obs_mat) {
-    // HMM CODE TO BE PUT HERE
+void MainController::computeChordsFromMelody(float **melody_obs_mat, int num_measures) {
+	_chord_select_model->loadParams();
+	int** chord_per_measure = new int*[12];
+	float* key_probabilities = new float[12];
+	float max_p = -FLT_MAX;
+	int best_key;
+
+	for (int i = 0; i < 12; i++)
+		chord_per_measure[i] = new int[num_measures];
+
+	for (int i = 0; i < 12; i++)
+	{
+		if (i != 0)
+		{
+			for (int j = 0; j < num_measures; j++)
+			{
+				std::rotate(&melody_obs_mat[j][0], &melody_obs_mat[j][1], &melody_obs_mat[j][12]);
+			}
+		}
+		key_probabilities[i] = _chord_select_model->viterbiDecode(melody_obs_mat, num_measures, chord_per_measure[i]);
+	}
+	for (int i = 0; i < 12; i++)
+	{
+		if (key_probabilities[i] > max_p)
+		{
+			max_p = key_probabilities[i];
+			best_key = i;
+		}
+	}
+
+	_chord_select_model->setChordSequence(chord_per_measure[best_key], best_key, num_measures);
+
+	// Clear buffers
+	for (int i = 0; i < 12; i++)
+		delete[] chord_per_measure[i];
+	delete[] chord_per_measure;
+	delete[] key_probabilities;
 }
 
 

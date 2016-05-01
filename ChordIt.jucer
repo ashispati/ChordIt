@@ -14,8 +14,10 @@
         <FILE id="QsXqDn" name="Synth.h" compile="0" resource="0" file="Source/Externals/Synth.h"/>
       </GROUP>
       <GROUP id="{4E4946B2-4E17-066E-A77F-33DB7513D49E}" name="Models">
-        <FILE id="kes09r" name="HMM.cpp" compile="1" resource="0" file="Source/Models/HMM.cpp"/>
-        <FILE id="W8FN7P" name="HMM.h" compile="0" resource="0" file="Source/Models/HMM.h"/>
+        <FILE id="vKgjyO" name="ChordSelectModel.cpp" compile="1" resource="0"
+              file="Source/Models/ChordSelectModel.cpp"/>
+        <FILE id="eqPiSK" name="ChordSelectModel.h" compile="0" resource="0"
+              file="Source/Models/ChordSelectModel.h"/>
         <FILE id="TkKb81" name="RecordingModel.cpp" compile="1" resource="0"
               file="Source/Models/RecordingModel.cpp"/>
         <FILE id="piZSQ1" name="RecordingModel.h" compile="0" resource="0"
@@ -88,6 +90,30 @@
         <MODULEPATH id="juce_audio_utils" path="../JUCE-OSX/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="ChordIt" headerPath="../../Source/AudioEngine&#10;../../Source/Controllers&#10;../../Source/Externals&#10;../../Source/LookAndFeel&#10;../../Source/Models&#10;../../Source/Views"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="3" targetName="ChordIt"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_opengl" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_cryptography" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_utils" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\Academics\Audio Software Engg\JUCE\modules"/>
+      </MODULEPATHS>
+    </VS2015>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>

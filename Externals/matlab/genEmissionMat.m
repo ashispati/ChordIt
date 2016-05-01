@@ -26,3 +26,7 @@ emission_mat(emission_mat == 0) = 0.1;
 for i = 1:dim_1
 emission_mat(i,:) = emission_mat(i,:)./norm(emission_mat(i,:),1);
 end
+
+fid = fopen('emission.bin','w');
+fwrite(fid, emission_mat', 'float');
+fclose(fid);

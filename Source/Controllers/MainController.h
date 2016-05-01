@@ -15,6 +15,7 @@
 class AudioEngine;
 class AppView;
 class RecordingModel;
+class ChordSelectModel;
 
 class MainController {
 private:
@@ -26,6 +27,9 @@ private:
     
     // Recording Model
     RecordingModel* _cur_recording_model;
+
+	// HMM Model
+	ChordSelectModel* _chord_select_model;
     
     // Tempo & Key Information
     int _tempo;
@@ -39,7 +43,7 @@ private:
     
     // Process Recording
     void computeMelodyObsMatrix(float** melody_obs_mat);
-    void computeChordsFromMelody(float** melody_obs_mat);
+    void computeChordsFromMelody(float** melody_obs_mat, int num_measures);
     
     // Playback Status
     bool _is_playing;
