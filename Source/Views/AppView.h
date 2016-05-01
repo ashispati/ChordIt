@@ -11,7 +11,7 @@
 #ifndef APPVIEW_H_INCLUDED
 #define APPVIEW_H_INCLUDED
 
-#include "JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 //#include "AppComponent.h"
 #include "CustomLookAndFeel.h"
 #include "MainController.h"
@@ -27,6 +27,8 @@ private:
     // Components
     ImageComponent _background;
     Image _image;
+    MidiKeyboardState _keyboard_state;
+    MidiKeyboardComponent _keyboard_component;
     
     // Look and Feel
     CustomLookAndFeel _custom_look_and_feel;
@@ -37,6 +39,8 @@ private:
     // Buttons and other elements
     TextButton _back_button;
     TextButton _record_button;
+    TextButton _process_button;
+    TextButton _play_button;
     
      // Constants for drawing purposes
     const int PADDING = 20;
@@ -53,9 +57,12 @@ public:
     void buttonClicked (Button* button) override;
     
     // Class Specific Methods
-    void setBackButtonStatus(bool is_recording);
+    void displayBackButton(bool is_ready_to_display);
+    void displayRecordButton(bool is_ready_to_record);
     void setRecordButton(bool is_recording);
-    
+    void displayProcessButton(bool is_ready_to_process);
+    void displayPlayElements(bool is_ready_to_play);
+    void setPlayButton(bool is_playing);
 };
 
 

@@ -27,7 +27,12 @@ private:
     RingBuffer* _ring_buffer;
     PitchTracker* _pitch_tracker;
     MainController& _controller;
-    PlaybackSynth* _synth;
+    PlaybackSynth* _ref_pitch_synth;
+    
+    MidiKeyboardState& _midi_keyboard_state;
+    Synthesiser _playback_synth;
+    MidiMessageCollector _midi_collector;
+    
     const int _window_size;
     int _num_input_channels, _num_output_channels, _num_samples_per_block;
     double _sample_rate;
@@ -39,7 +44,7 @@ private:
     
     
 public:
-    AudioEngine(MainController& controller);
+    AudioEngine(MainController& controller, MidiKeyboardState& state);
     ~AudioEngine();
     void prepareToPlay(int samples_per_block_expected, double sample_rate) override;
     void getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill) override;
@@ -49,6 +54,8 @@ public:
     int getNumSamplesPerBlock() { return _num_samples_per_block; }
     void startAudioCallBack();
     void stopAudioCallBack();
+    void startPlaybackCallBack();
+    void stopPlaybackCallBack();
     
     void playMetronome (const AudioSourceChannelInfo& buffer_to_fill, int next_beat);
     void playReferencePitch(const juce::AudioSourceChannelInfo& buffer_to_fill, int num_samples);

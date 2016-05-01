@@ -23,7 +23,7 @@ MainAppWindow::MainAppWindow()
     setUsingNativeTitleBar(true);
     ResizableWindow::setFullScreen(true);
     
-    setSize(600,400);
+    setSize(900,600);
     
     _current_view = new HomeView(this);
     setContentOwned(_current_view, false);

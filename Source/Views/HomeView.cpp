@@ -45,7 +45,7 @@ HomeView::HomeView (MainAppWindow* window) : _main_app_window(window){
     
     _key_combo_box.setEditableText(false);
     //_key_combo_box.setText("Select Root Note");
-    _key_combo_box.setJustificationType(Justification::centred);
+    _key_combo_box.setJustificationType(Justification::centredLeft);
     _key_combo_box.setTextWhenNothingSelected(String::empty);
     _key_combo_box.setTextWhenNoChoicesAvailable("No Options");
     assignItemsToRootNoteBox();
@@ -99,11 +99,11 @@ void HomeView::resized () {
     //Set Key ComboBox
     int width_label = width / 4;
     _key_label.setBounds(width/2 - width_label/2- 2*PADDING, height/2 - PADDING, width_label, height/20);
-    _key_combo_box.setBounds(width/2 + 2*PADDING, height/2 - PADDING, width/10, height/20);
+    _key_combo_box.setBounds(width/2 + 2*PADDING, height/2 - PADDING, width/10, height/30);
     
     //Set Tempo Editor Box
     _bpm_label.setBounds(width/2 - width_label/2 - 2*PADDING, height/2 + PADDING, width_label, height/20);
-    _bpm_text_editor.setBounds(width/2 + 2*PADDING, height/2 + PADDING, width/10, height/20);
+    _bpm_text_editor.setBounds(width/2 + 2*PADDING, height/2 + PADDING, width/10, height/30);
 }
 
 void HomeView::buttonClicked (Button* button) {

@@ -36,10 +36,17 @@ private:
     // Recording Status
     bool _is_recording;
     int _num_samples_recorded;
+    
+    // Process Recording
+    void computeMelodyObsMatrix(float** melody_obs_mat);
+    void computeChordsFromMelody(float** melody_obs_mat);
+    
+    // Playback Status
+    bool _is_playing;
 
     
 public:
-    MainController (AppView* view);
+    MainController (AppView* view, MidiKeyboardState& state);
     ~MainController();
     
     // Recording related methods
@@ -50,7 +57,7 @@ public:
     void resetRecording();
     double getRecordingTimeInBeats();
     int getCountInDurationInSamples();
-    void resetPlaybackSynth();
+    void resetRefPitchSynth();
     void resetRecordingModel();
     void pushPitchToModel(float pitch_midi, int beat);
     
@@ -63,6 +70,14 @@ public:
     void setTimeSignatureDenominator (int denominator);
     int getTimeSignatureNumerator() const;
     int getTimeSignatureDenominator() const;
+    
+    void processRecording();
+    
+    // Playback related methods
+    void startPlayback();
+    void stopPlayback();
+    bool isPlaying();
+    void resetPlaybackSynth();
 };
 
 

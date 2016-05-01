@@ -152,7 +152,12 @@ vector<int> RecordingModel::findMeasureBoundaries() {
 }
 
 int RecordingModel::getNumMeasuresRecorded() {
-    return _measure_data[_measure_data.size() - 1] + 1;
+    if (_measure_data.size() == 0) {
+        return -1;
+    }
+    else {
+        return _measure_data[_measure_data.size() - 1] + 1;
+    }
 }
 
 int RecordingModel::getSizeOfMelodyObsMatrix() {
