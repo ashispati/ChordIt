@@ -6,6 +6,9 @@ class ChordSelectModel
 private:
 	#if JUCE_MAC
 		const string _trFile = "../../../../Resources/transition.bin";
+		const string _emFile = "../../../../Resources/emission.bin";
+		const string _chordMapFile = "../../../../Resources/chord_map_MIDI.txt";
+		const string _chordNameFile = "../../../../Resources/chord_names.txt";
 	#endif
 	#if JUCE_WINDOWS
 		const string _trFile = "../../Resources/transition.bin";
