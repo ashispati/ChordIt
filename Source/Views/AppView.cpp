@@ -61,7 +61,7 @@ AppView::AppView (MainAppWindow* window, int tempo, int key)
     _keyboard_component.setAvailableRange(36,95);
     _keyboard_component.setVisible(false);
     
-    // Set Metronome Component
+    // Set Metronome Label
     addAndMakeVisible(_metronome_label);
     _metronome_label.setColour(Label::textColourId, Colours::mintcream);
     _metronome_label.setColour(Label::backgroundColourId, Colours::transparentBlack);
@@ -69,7 +69,7 @@ AppView::AppView (MainAppWindow* window, int tempo, int key)
     _metronome_label.setJustificationType(Justification::centredLeft);
     _metronome_label.setVisible(true);
     
-    // Set Instruction Component
+    // Set Instruction Label
     addAndMakeVisible(_instruction_label);
     _instruction_label.setColour(Label::textColourId, Colours::mintcream);
     _instruction_label.setColour(Label::backgroundColourId, Colours::transparentBlack);
@@ -77,13 +77,15 @@ AppView::AppView (MainAppWindow* window, int tempo, int key)
     _instruction_label.setJustificationType(Justification::centredLeft);
     _instruction_label.setVisible(false);
     
-    // Set Chord Text Component
+    // Set Chord Text Label
     addAndMakeVisible(_chord_text);
     _chord_text.setColour(Label::textColourId, Colours::mintcream);
     _chord_text.setColour(Label::backgroundColourId, Colours::transparentBlack);
     _chord_text.setText(" ", dontSendNotification);
     _chord_text.setJustificationType(Justification::centred);
     _chord_text.setVisible(false);
+    
+    // Set 
     
     // Set Timer Callback
     startTimer(10);

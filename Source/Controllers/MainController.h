@@ -87,7 +87,7 @@ public:
     void stopNote(int num_measure, int note_idx);
     double getPlaybackTimeInBeats();
     void addPlaybackSamples(int num_samples);
-    void resetPlaybackSynth();
+    void resetPlayback();
     void setStopFlag(bool stop_flag);
     bool getStopFlag() const;
     int getBeatCount();

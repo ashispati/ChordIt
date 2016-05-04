@@ -258,7 +258,7 @@ void MainController::startPlayback() {
         return;
     }
     _is_playing = true;
-    resetPlaybackSynth();
+    resetPlayback();
     _audio_engine->startPlaybackCallBack();
     _app_view->setPlayButton(_is_playing);
     _app_view->displayRecordButton(false);
@@ -273,6 +273,7 @@ void MainController::stopPlayback() {
     _is_playing = false;
     _stop_flag = false;
     _audio_engine->stopPlaybackCallBack();
+    _audio_engine->clearPlaybackSynth();
     _app_view->setPlayButton(_is_playing);
     _app_view->displayRecordButton(true);
     _app_view->displayProcessButton(true);
@@ -325,7 +326,7 @@ void MainController::addPlaybackSamples(int num_samples) {
     _num_samples_played += num_samples;
 }
 
-void MainController::resetPlaybackSynth() {
+void MainController::resetPlayback() {
     _num_samples_played = -getCountInDurationInSamples();
 }
 

@@ -64,6 +64,7 @@ public:
     
     void playNote(int midi_note, float velocity);
     void stopNote(int midi_note);
+    void clearPlaybackSynth();
 };
 
 

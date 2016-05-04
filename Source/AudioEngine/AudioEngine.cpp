@@ -334,6 +334,9 @@ void AudioEngine::stopNote(int midi_note) {
     _midi_keyboard_state.noteOff(1, midi_note-12);
 }
 
+void AudioEngine::clearPlaybackSynth() {
+    _midi_keyboard_state.allNotesOff(1);
+}
 
 
 /*

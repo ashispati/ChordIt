@@ -159,7 +159,7 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 	vector<string> split_chord;
 	for (int i = 0; i < num_measures; i++)
 	{
-		chord = _chord_names[chord_id_per_measure[i - 2]];
+		chord = _chord_names[chord_id_per_measure[i]-2];
 		stringstream ss(chord);
 		int note_index = 0;
 		while (ss >> buffer)
@@ -168,13 +168,19 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
         cout << split_chord[0]<< endl;
 		// get note from the chord
 		for (int j = 0; j < 11; j++)
-			if (_notes[j].compare(split_chord[0]) == 0)
-				note_index = j;
-
+        {
+            if (_notes[j].compare(split_chord[0]) == 0)
+            {
+                note_index = j;
+                break;
+            }
+        }
 		//transpose note
 		note_index = (note_index + _transpose)%12;
 		chord = _notes[note_index] + " " + split_chord[1];
 		_chord_sequence_text.push_back(chord);
+        split_chord.clear();
+        
 
 		_chord_sequence_in_MIDI[i] = new int[3];
 		getMIDI(chord_id_per_measure[i]-2, _chord_sequence_in_MIDI[i]); // -2 because of the 'start' and 'end' states.

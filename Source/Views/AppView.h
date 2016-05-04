@@ -32,6 +32,7 @@ private:
     Label _metronome_label;
     Label _instruction_label;
     Label _chord_text;
+    Component _pitch_component;
     
     // Look and Feel
     CustomLookAndFeel _custom_look_and_feel;
