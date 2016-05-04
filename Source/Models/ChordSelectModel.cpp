@@ -135,10 +135,10 @@ void ChordSelectModel::loadChordNames()
 	}
 }
 
-void ChordSelectModel::getMIDI(int i, int *MIDI_notes)
+void ChordSelectModel::getMIDI(int id, int *MIDI_notes)
 {
 	for (int j = 0; j < 3; j++)
-		MIDI_notes[j] = _chords_MIDI_map[i - 2][j];
+		MIDI_notes[j] = _chords_MIDI_map[id][j];
 }
 
 int ChordSelectModel::getNumMeasures()
@@ -153,12 +153,31 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 
 	_chord_sequence_in_MIDI = new int*[num_measures];
 	_num_measures_in_sequence = num_measures;
+	_transpose = 12 - transpose;
+	string chord, buffer;
+	vector<string> split_chord;
 	for (int i = 0; i < num_measures; i++)
 	{
+		chord = _chord_names[chord_id_per_measure[i - 2]];
+		stringstream ss(chord);
+		int note_index = 0;
+		while (ss >> buffer)
+			split_chord.push_back(buffer);
+
+		// get note from the chord
+		for (int i = 0; i < 11; i++)
+			if (_notes[i].compare(split_chord[0]) == 0)
+				note_index = i;
+
+		//transpose note
+		note_index = (note_index + _transpose)%12;
+		chord = _notes[note_index] + " " + split_chord[1];
+		_chord_sequence_text.push_back(chord);
+
 		_chord_sequence_in_MIDI[i] = new int[3];
-		getMIDI(chord_id_per_measure[i], _chord_sequence_in_MIDI[i]);
-		for (int j = 0; j < 3; j++)
-			_chord_sequence_in_MIDI[i][j] += 12 - transpose;	// Reverse transpose based on best key
+		getMIDI(chord_id_per_measure[i]-2, _chord_sequence_in_MIDI[i]); // -2 because of the 'start' and 'end' states.
+		//for (int j = 0; j < 3; j++)
+			//_chord_sequence_in_MIDI[i][j] += 12 - transpose;	// Reverse transpose based on best key
 	}
 	_is_chord_set = true;
 }
@@ -167,6 +186,7 @@ void ChordSelectModel::clearChordSequence()
 {
 	if (_is_chord_set == true)
 	{
+		_chord_names.clear();
 		for (int i = 0; i < _num_measures_in_sequence; i++)
 			delete[] _chord_sequence_in_MIDI[i];
 		delete[] _chord_sequence_in_MIDI;

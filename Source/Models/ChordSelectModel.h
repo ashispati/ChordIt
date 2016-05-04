@@ -15,6 +15,8 @@ private:
 	float** _emission;
 	int** _chords_MIDI_map;
 	int** _chord_sequence_in_MIDI;
+	vector<string> _chord_sequence_text;
+	int _transpose;
 	vector<string> _chord_names;
 	int _num_measures_in_sequence;
 	int _states;
