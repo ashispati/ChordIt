@@ -154,7 +154,7 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 
 	_chord_sequence_in_MIDI = new int*[num_measures];
 	_num_measures_in_sequence = num_measures;
-	_transpose = 12 - transpose;
+	_transpose = transpose;
 	string chord = "", buffer;
 	vector<string> split_chord;
 	for (int i = 0; i < num_measures; i++)
