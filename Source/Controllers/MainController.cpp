@@ -25,6 +25,7 @@ MainController::MainController(AppView* view, MidiKeyboardState& state) :
 MainController::~MainController() {
     delete _audio_engine;
     delete _cur_recording_model;
+    delete _chord_select_model;
 }
 
 void MainController::startRecording() {
@@ -158,8 +159,8 @@ void MainController::processRecording() {
         }
     }
     
-    //computeMelodyObsMatrix(melody_obs_mat);
-    //computeChordsFromMelody(melody_obs_mat, num_measures_recorded);
+    computeMelodyObsMatrix(melody_obs_mat);
+    computeChordsFromMelody(melody_obs_mat, num_measures_recorded);
     
     // Delete memory
     for (int i = 0; i < num_measures_recorded; i++) {
@@ -223,6 +224,10 @@ void MainController::computeChordsFromMelody(float **melody_obs_mat, int num_mea
 		}
 	}
 
+    for (int i = 0; i < num_measures; i++) {
+        cout << chord_per_measure[best_key][i] << " ";
+    }
+    cout << endl;
 	_chord_select_model->setChordSequence(chord_per_measure[best_key], best_key, num_measures);
 
 	// Clear buffers
@@ -234,7 +239,7 @@ void MainController::computeChordsFromMelody(float **melody_obs_mat, int num_mea
     
     // test code starts
     /*
-     num_measures = _chord_select_model->getNumMeasures();
+    num_measures = _chord_select_model->getNumMeasures();
     for (int i = 0; i < num_measures; i++) {
         for (int j = 0; j < 3; j++) {
             int chord_note = _chord_select_model->getMIDInote(i, j);

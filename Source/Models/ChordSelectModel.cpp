@@ -10,6 +10,18 @@ using namespace std;
 
 ChordSelectModel::ChordSelectModel(int states, int observations)
 {
+#if JUCE_MAC
+    _trFile = "../../../../Resources/transition.bin";
+    _emFile = "../../../../Resources/emission.bin";
+    _chordMapFile = "../../../../Resources/chord_map_MIDI.txt";
+    _chordNameFile = "../../../../Resources/chord_names.txt";
+#endif
+#if JUCE_WINDOWS
+    _trFile = "../../Resources/transition.bin";
+    _emFile = "../../Resources/emission.bin";
+    _chordMapFile = "../../Resources/chord_map_MIDI.txt";
+    _chordNameFile = "../../Resources/chord_names.txt";
+#endif
 	_states = states;
 	_observations = observations;
 	
@@ -51,6 +63,8 @@ void ChordSelectModel::loadParams()
 	infile_t.open(_trFile, ios::in|ios::binary);
 	infile_e.open(_emFile, ios::in|ios::binary);
 
+    cout << "Loaded Binary Files " << infile_t.is_open() << " " << infile_e.is_open() << endl;
+    
 	for (int i = 0; i < _states; i++)
 	{
 		infile_t.read(reinterpret_cast<char*>(&_transition[i][0]), _states * sizeof(float));
@@ -91,7 +105,8 @@ void ChordSelectModel::loadChordMap()
 {
 	ifstream f;
 	f.open(_chordMapFile, ios::in);
-
+    cout << "Opened Chord Names " << f.is_open() << endl;
+    
 	string line;
 
 	for (int i = 0; i < 60; i++)
@@ -110,6 +125,7 @@ void ChordSelectModel::loadChordNames()
 	ifstream f;
 	f.open(_chordNameFile, ios::in);
 
+    cout << "Opened Chord Names " << f.is_open() << endl;
 	string line;
 	string chord;
 	for (int i = 0; i < 60; i++)

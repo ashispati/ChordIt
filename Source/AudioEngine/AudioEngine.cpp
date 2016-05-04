@@ -289,6 +289,7 @@ void AudioEngine::playChords(const AudioSourceChannelInfo &buffer_to_fill, int n
             int measure_num = next_beat / downbeat;
             
             // test code
+            /*
             if (measure_num == 0) {
                 for (int i = 0; i < 3; i++) {
                     playNote(60 + 2*i, 0);
@@ -299,17 +300,18 @@ void AudioEngine::playChords(const AudioSourceChannelInfo &buffer_to_fill, int n
                     stopNote(60 + 2*i);
                 }
             }
+            */
             // test code ends
             
             if (measure_num >= 0)
             {
-                for (int i = 0; i < 3; i++) {
-                    //_controller.playNote(measure_num, i);
-                }
                 if (measure_num >= 1) {
                     for (int j = 0; j < 3; j++) {
-                        //_controller.stopNote(measure_num - 1);
+                        _controller.stopNote(measure_num - 1, j);
                     }
+                }
+                for (int i = 0; i < 3; i++) {
+                    _controller.playNote(measure_num, i);
                 }
             }
             cout << "Measure Number is: " << next_beat / downbeat << endl;
@@ -325,11 +327,11 @@ void AudioEngine::setPlaybackSynthFreq(double freq_in_hz, int window_length_in_s
 }
 
 void AudioEngine::playNote(int midi_note, float velocity) {
-    _midi_keyboard_state.noteOn(1, midi_note, velocity);
+    _midi_keyboard_state.noteOn(1, midi_note-12, velocity);
 }
 
 void AudioEngine::stopNote(int midi_note) {
-    _midi_keyboard_state.noteOff(1, midi_note);
+    _midi_keyboard_state.noteOff(1, midi_note-12);
 }
 
 

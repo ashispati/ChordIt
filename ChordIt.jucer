@@ -7,6 +7,11 @@
     <GROUP id="{C8D5802D-66FF-52CD-4294-E0541B1C363F}" name="Resources">
       <FILE id="KSR4H0" name="background1.jpg" compile="0" resource="1" file="Resources/background1.jpg"/>
       <FILE id="OXNqn2" name="background2.jpg" compile="0" resource="1" file="Resources/background2.jpg"/>
+      <FILE id="ve8jh9" name="chord_map_MIDI.txt" compile="0" resource="1"
+            file="Resources/chord_map_MIDI.txt"/>
+      <FILE id="DPCZIy" name="chord_names.txt" compile="0" resource="1" file="Resources/chord_names.txt"/>
+      <FILE id="qe7Smn" name="emission.bin" compile="0" resource="1" file="Resources/emission.bin"/>
+      <FILE id="vIA15Q" name="transition.bin" compile="0" resource="1" file="Resources/transition.bin"/>
     </GROUP>
     <GROUP id="{D4C17CFF-5441-BE18-834D-972F7F2DBB65}" name="Source">
       <GROUP id="{244D258B-491E-9E20-37CE-2D3B77370CCC}" name="Externals">
