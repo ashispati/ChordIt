@@ -132,6 +132,7 @@ void ChordSelectModel::loadChordNames()
 	{
 		getline(f, chord);
 		_chord_names.push_back(chord);
+        cout << chord << endl;
 	}
 }
 
@@ -154,7 +155,7 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 	_chord_sequence_in_MIDI = new int*[num_measures];
 	_num_measures_in_sequence = num_measures;
 	_transpose = 12 - transpose;
-	string chord, buffer;
+	string chord = "", buffer;
 	vector<string> split_chord;
 	for (int i = 0; i < num_measures; i++)
 	{
@@ -164,10 +165,11 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 		while (ss >> buffer)
 			split_chord.push_back(buffer);
 
+        cout << split_chord[0]<< endl;
 		// get note from the chord
-		for (int i = 0; i < 11; i++)
-			if (_notes[i].compare(split_chord[0]) == 0)
-				note_index = i;
+		for (int j = 0; j < 11; j++)
+			if (_notes[j].compare(split_chord[0]) == 0)
+				note_index = j;
 
 		//transpose note
 		note_index = (note_index + _transpose)%12;
@@ -176,8 +178,8 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 
 		_chord_sequence_in_MIDI[i] = new int[3];
 		getMIDI(chord_id_per_measure[i]-2, _chord_sequence_in_MIDI[i]); // -2 because of the 'start' and 'end' states.
-		//for (int j = 0; j < 3; j++)
-			//_chord_sequence_in_MIDI[i][j] += 12 - transpose;	// Reverse transpose based on best key
+		for (int j = 0; j < 3; j++)
+			_chord_sequence_in_MIDI[i][j] += 12 - transpose;	// Reverse transpose based on best key
 	}
 	_is_chord_set = true;
 }
@@ -198,6 +200,10 @@ void ChordSelectModel::clearChordSequence()
 int ChordSelectModel::getMIDInote(int measure_num, int index)
 {
 	return _chord_sequence_in_MIDI[measure_num][index];
+}
+
+String ChordSelectModel::getChordText(int measure_num) {
+    return _chord_sequence_text[measure_num];
 }
 
 float ChordSelectModel::viterbiDecode(float** observation_mat, int num_observations, int* seq)

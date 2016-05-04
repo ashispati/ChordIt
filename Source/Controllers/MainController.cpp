@@ -353,5 +353,5 @@ int MainController::getMeasureCount() {
 }
 
 String MainController::getChordString(int measure_num) {
-    
+    return _chord_select_model->getChordText(measure_num);
 }

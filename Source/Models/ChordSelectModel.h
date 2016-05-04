@@ -38,6 +38,7 @@ public:
     //Functions for getting the MIDI notes
     int getNumMeasures();
     int getMIDInote(int measure_num, int index);
+    String getChordText(int measure_num);
     
     //Functions for setting the chord sequence
     void setChordSequence(int* chord_id_per_measure, int transpose, int num_measures);

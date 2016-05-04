@@ -163,8 +163,8 @@ void AppView::timerCallback() {
         int measure_num = _controller->getMeasureCount();
         cout << measure_num << endl;
         if (measure_num >= 0) {
-            //String chord_name = _controller->getChordString(measure_num);
-            _chord_text.setText(String(measure_num), dontSendNotification);
+            String chord_name = _controller->getChordString(measure_num);
+            _chord_text.setText(chord_name, dontSendNotification);
         }
         else {
             _chord_text.setText(" ", dontSendNotification);
