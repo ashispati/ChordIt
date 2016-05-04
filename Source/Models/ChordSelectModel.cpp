@@ -31,6 +31,7 @@ ChordSelectModel::ChordSelectModel(int states, int observations)
 
 ChordSelectModel::~ChordSelectModel()
 {
+	clearChordSequence();
 	for(int i = 0; i < _states; i++)
 	{
 		if (i < _states - 2)
@@ -38,6 +39,7 @@ ChordSelectModel::~ChordSelectModel()
 		delete[] _transition[i];
 		delete[] _emission[i];
 	}
+	delete[] _chords_MIDI_map;
 	delete[] _transition;
 	delete[] _emission;
 }
@@ -60,6 +62,7 @@ void ChordSelectModel::loadParams()
 	convert2log();
 
 	loadChordMap();
+	loadChordNames();
 }
 
 void ChordSelectModel::convert2log()
@@ -89,8 +92,6 @@ void ChordSelectModel::loadChordMap()
 	ifstream f;
 	f.open(_chordMapFile, ios::in);
 
-	int a = f.is_open();
-
 	string line;
 
 	for (int i = 0; i < 60; i++)
@@ -102,6 +103,20 @@ void ChordSelectModel::loadChordMap()
 			s >> _chords_MIDI_map[i][j];
 	}
 
+}
+
+void ChordSelectModel::loadChordNames()
+{
+	ifstream f;
+	f.open(_chordNameFile, ios::in);
+
+	string line;
+	string chord;
+	for (int i = 0; i < 60; i++)
+	{
+		getline(f, chord);
+		_chord_names.push_back(chord);
+	}
 }
 
 void ChordSelectModel::getMIDI(int i, int *MIDI_notes)
@@ -134,11 +149,14 @@ void ChordSelectModel::setChordSequence(int* chord_id_per_measure, int transpose
 
 void ChordSelectModel::clearChordSequence()
 {
-	for (int i = 0; i < _num_measures_in_sequence; i++)
-		delete[] _chord_sequence_in_MIDI[i];
-	delete[] _chord_sequence_in_MIDI;
-	_num_measures_in_sequence = 0;
-	_is_chord_set = false;
+	if (_is_chord_set == true)
+	{
+		for (int i = 0; i < _num_measures_in_sequence; i++)
+			delete[] _chord_sequence_in_MIDI[i];
+		delete[] _chord_sequence_in_MIDI;
+		_num_measures_in_sequence = 0;
+		_is_chord_set = false;
+	}
 }
 
 int ChordSelectModel::getMIDInote(int measure_num, int index)

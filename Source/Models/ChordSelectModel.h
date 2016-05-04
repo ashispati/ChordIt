@@ -7,10 +7,13 @@ private:
 	const string _trFile = "../../Resources/transition.bin";
 	const string _emFile = "../../Resources/emission.bin";
 	const string _chordMapFile = "../../Resources/chord_map_MIDI.txt";
+	const string _chordNameFile = "../../Resources/chord_names.txt";
+	const string _notes[12] = { "C", "C#", "D","D#","E","F","F#","G","G#","A","Bb","B" };
 	float** _transition;
 	float** _emission;
 	int** _chords_MIDI_map;
 	int** _chord_sequence_in_MIDI;
+	vector<string> _chord_names;
 	int _num_measures_in_sequence;
 	int _states;
 	int _observations;
@@ -18,6 +21,7 @@ private:
 
 	void convert2log();
 	void loadChordMap();
+	void loadChordNames();
 	void clearChordSequence();
 	void getMIDI(int i, int *MIDI_notes);
     

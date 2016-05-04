@@ -1,12 +1,16 @@
 import os
 import operator
+import re
 
 type = 'major'
 #type = 'minor'
 
+notes_dict = {0: 'C',1: 'C#',2: 'D',3: 'D#', 4: 'E',5: 'F',6: 'F#',7: 'G',8: 'G#',9: 'A',10: 'Bb',11: 'B'}
+
 chords_dir = 'D:/Academics/Audio Software Engg/LeadSheets/'+ type + '/reduced_chords/'
 notes_dir = 'D:/Academics/Audio Software Engg/LeadSheets/' + type + '/notes/'
 
+print(chords_dir)
 chordfiles = os.listdir(chords_dir)
 notefiles = os.listdir(notes_dir)
 
@@ -28,9 +32,15 @@ def genDictofChords():
 chords = genDictofChords()
 # sorted_x = sorted(chords.items(), key=operator.itemgetter(1))
 
+# c= 0
 # for i in sorted_x:
-	# print(i)
-
+	# if c >= 2:
+		# num = re.findall(r'\d+', i[0])
+		# chord = i[0].strip(str(num))
+		# chord = notes_dict[int(num[0])]+' '+chord
+		# print(chord)
+	# c = c+1
+	
 f_out_c = open('chord_transitions_'+ type + '.txt','w')
 f_out_n = open('note_observations_'+ type + '.txt','w')
 for i, chordfile in enumerate(chordfiles):
