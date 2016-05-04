@@ -3,7 +3,7 @@
  
  AudioEngine.cpp
  Created: 1 Feb 2016 11:52:40pm
- Author:  Som
+ Author:  Ashis Pati
  
  ==============================================================================
  */
@@ -135,13 +135,15 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
             
             // Update number of samples recorded
             double curr_beat = _controller.getRecordingTimeInBeats();
-            _controller.addSamples(buffer_to_fill.numSamples);
+            _controller.addRecordingSamples(buffer_to_fill.numSamples);
             double next_beat = _controller.getRecordingTimeInBeats();
             
+            // Play Reference Pitch
             if (next_beat < 0 && next_beat >= -_controller.getTimeSignatureNumerator() ) {
                 playReferencePitch(buffer_to_fill, buffer_to_fill.numSamples);
             }
             
+            // Play Metronome
             if (floor(curr_beat) != floor(next_beat)) {
                 playMetronome(buffer_to_fill, floor(next_beat));
             }
@@ -150,6 +152,17 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
         }
         
         else if (_controller.isPlaying()) {
+            // Update number of samples played
+            double curr_beat = _controller.getPlaybackTimeInBeats();
+            _controller.addPlaybackSamples(buffer_to_fill.numSamples);
+            double next_beat = _controller.getPlaybackTimeInBeats();
+
+            
+            // Play Chords
+            if (floor(curr_beat) != floor(next_beat)) {
+                playChords(buffer_to_fill, floor(next_beat));
+            }
+            
             buffer_to_fill.clearActiveBufferRegion();
             MidiBuffer incoming_midi;
             _midi_collector.removeNextBlockOfMessages(incoming_midi, buffer_to_fill.numSamples);
@@ -158,6 +171,17 @@ void AudioEngine::getNextAudioBlock(const AudioSourceChannelInfo &buffer_to_fill
             const bool inject_indirect_events = true;
             _midi_keyboard_state.processNextMidiBuffer(incoming_midi, start_sample, buffer_to_fill.numSamples, inject_indirect_events);
             _playback_synth.renderNextBlock(*buffer_to_fill.buffer, incoming_midi, start_sample, buffer_to_fill.numSamples);
+            
+            // Play Metronome
+            if (floor(curr_beat) != floor(next_beat)) {
+                playMetronome(buffer_to_fill, floor(next_beat));
+            }
+            
+            // Check if playback should stop
+            if (next_beat > _controller.getRecordingTimeInBeats()) {
+                _controller.setStopFlag(true);
+            }
+            
         }
         
         else {
@@ -198,7 +222,16 @@ void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, in
     const int HALF_WINDOW_LENGTH = 20;
     const int WINDOW_LENGTH = HALF_WINDOW_LENGTH * 2;
     
-    double frac = _controller.getRecordingTimeInBeats() - next_beat;
+    double frac = 0;
+    if (_controller.isRecording()) {
+        frac = _controller.getRecordingTimeInBeats() - next_beat;
+    }
+    else if (_controller.isPlaying()) {
+        frac  = _controller.getPlaybackTimeInBeats() - next_beat;
+    }
+    else {
+        jassert("Invalid call to PlayMetronome");
+    }
     float tempo = _controller.getTempo();
     int num_samples_per_beat = _sample_rate * 60 / tempo;
     
@@ -206,6 +239,7 @@ void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, in
     
     int metronome_position = (_num_samples_per_block - static_cast<int>(frac * num_samples_per_beat)) % _num_samples_per_block;
     jassert (isPositiveAndBelow(metronome_position, _num_samples_per_block));
+    
     
     // Find the location to write the window. The window should be centered around the metronome location.
     // If writing the window requires multiple blocks, we shift the window so it stays within the current
@@ -220,10 +254,10 @@ void AudioEngine::playMetronome(const AudioSourceChannelInfo& buffer_to_fill, in
         start_position = stop_position - WINDOW_LENGTH;
     }
     
-    // Different gains for downbeat and other beats.
-    float gain = 0.8;
+    // Different gains for downbeat and other beats & play chords on down beats if playing back
+    float gain = 0.1;
     if(next_beat % downbeat == 0) {
-        gain = 0.45;
+        gain = 0.85;
     }
     Logger::getCurrentLogger()->writeToLog("start: " + String(start_position) + ", stop: " + String(stop_position) + ".");
     // Computing and writing the metronome waveform.
@@ -241,12 +275,64 @@ void AudioEngine::playReferencePitch(const juce::AudioSourceChannelInfo& buffer_
     _ref_pitch_synth->renderNextBlock(buffer_to_fill, 0, num_samples);
 }
 
+void AudioEngine::playChords(const AudioSourceChannelInfo &buffer_to_fill, int next_beat) {
+    double frac = _controller.getPlaybackTimeInBeats() - next_beat;;
+    float tempo = _controller.getTempo();
+    int num_samples_per_beat = _sample_rate * 60 / tempo;
+    int downbeat = _controller.getTimeSignatureNumerator();
+    int chord_position = (_num_samples_per_block - static_cast<int>(frac * num_samples_per_beat)) % _num_samples_per_block;
+    jassert (isPositiveAndBelow(chord_position, _num_samples_per_block));
+    
+    // Play chords on down beats if playing back
+    if(next_beat % downbeat == 0) {
+        if (_controller.isPlaying()) {
+            int measure_num = next_beat / downbeat;
+            
+            // test code
+            if (measure_num == 0) {
+                for (int i = 0; i < 3; i++) {
+                    playNote(60 + 2*i, 0);
+                }
+            }
+            else if (measure_num == 1) {
+                for (int i = 0; i < 3; i++) {
+                    stopNote(60 + 2*i);
+                }
+            }
+            // test code ends
+            
+            if (measure_num >= 0)
+            {
+                for (int i = 0; i < 3; i++) {
+                    //_controller.playNote(measure_num, i);
+                }
+                if (measure_num >= 1) {
+                    for (int j = 0; j < 3; j++) {
+                        //_controller.stopNote(measure_num - 1);
+                    }
+                }
+            }
+            cout << "Measure Number is: " << next_beat / downbeat << endl;
+        }
+    }
+}
+
 void AudioEngine::setPlaybackSynthFreq(double freq_in_hz, int window_length_in_samples){
     _ref_pitch_synth->updateAngleDelta(freq_in_hz);
     _ref_pitch_synth->clearWindow();
     _ref_pitch_synth->createNewWindow(window_length_in_samples);
     _ref_pitch_synth->setTailOff(1.0);
 }
+
+void AudioEngine::playNote(int midi_note, float velocity) {
+    _midi_keyboard_state.noteOn(1, midi_note, velocity);
+}
+
+void AudioEngine::stopNote(int midi_note) {
+    _midi_keyboard_state.noteOff(1, midi_note);
+}
+
+
 
 /*
  vector<float> AudioEngine::getNewPitches(int previous_pitch_idx) {

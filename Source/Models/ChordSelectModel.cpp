@@ -2,8 +2,11 @@
 #include<fstream>
 #include<sstream>
 #include<iostream>
+#include<cfloat>
 
 #include "ChordSelectModel.h"
+
+using namespace std;
 
 ChordSelectModel::ChordSelectModel(int states, int observations)
 {

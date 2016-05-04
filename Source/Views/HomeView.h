@@ -61,7 +61,6 @@ public:
     
     // TextEditor Methods
     void textEditorFocusLost(TextEditor &text_editor) override;
-    
 };
 
 

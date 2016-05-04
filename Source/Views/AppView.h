@@ -19,7 +19,7 @@
 
 class MainAppWindow;
 
-class AppView : public Component, public Button::Listener
+class AppView : public Component, public Button::Listener, public Timer
 {
 private:
     MainAppWindow* _main_app_window;
@@ -29,6 +29,9 @@ private:
     Image _image;
     MidiKeyboardState _keyboard_state;
     MidiKeyboardComponent _keyboard_component;
+    Label _metronome_label;
+    Label _instruction_label;
+    Label _chord_text;
     
     // Look and Feel
     CustomLookAndFeel _custom_look_and_feel;
@@ -45,6 +48,7 @@ private:
      // Constants for drawing purposes
     const int PADDING = 20;
     
+    
 public:
     AppView (MainAppWindow* window, int tempo, int key);
     virtual ~AppView();
@@ -56,6 +60,9 @@ public:
     // Button Listener Methods
     void buttonClicked (Button* button) override;
     
+    // Timer Specific Methods
+    void timerCallback() override;
+    
     // Class Specific Methods
     void displayBackButton(bool is_ready_to_display);
     void displayRecordButton(bool is_ready_to_record);
@@ -63,6 +70,7 @@ public:
     void displayProcessButton(bool is_ready_to_process);
     void displayPlayElements(bool is_ready_to_play);
     void setPlayButton(bool is_playing);
+
 };
 
 

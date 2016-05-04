@@ -11,6 +11,8 @@
 #include "AppView.h"
 #include "MainWindow.h"
 
+using namespace std;
+
 AppView::AppView (MainAppWindow* window, int tempo, int key)
 : _main_app_window(window), _keyboard_component(_keyboard_state, MidiKeyboardComponent::horizontalKeyboard){
     
@@ -56,8 +58,35 @@ AppView::AppView (MainAppWindow* window, int tempo, int key)
     
     // Set Keyboard Component
     addAndMakeVisible(_keyboard_component);
-    _keyboard_component.setAvailableRange(21,108);
+    _keyboard_component.setAvailableRange(36,95);
     _keyboard_component.setVisible(false);
+    
+    // Set Metronome Component
+    addAndMakeVisible(_metronome_label);
+    _metronome_label.setColour(Label::textColourId, Colours::mintcream);
+    _metronome_label.setColour(Label::backgroundColourId, Colours::transparentBlack);
+    _metronome_label.setText("Step 1: Record Melody", dontSendNotification);
+    _metronome_label.setJustificationType(Justification::centredLeft);
+    _metronome_label.setVisible(true);
+    
+    // Set Instruction Component
+    addAndMakeVisible(_instruction_label);
+    _instruction_label.setColour(Label::textColourId, Colours::mintcream);
+    _instruction_label.setColour(Label::backgroundColourId, Colours::transparentBlack);
+    _instruction_label.setText("Step 2: Process Data to Generate Chord Sequence", dontSendNotification);
+    _instruction_label.setJustificationType(Justification::centredLeft);
+    _instruction_label.setVisible(false);
+    
+    // Set Chord Text Component
+    addAndMakeVisible(_chord_text);
+    _chord_text.setColour(Label::textColourId, Colours::mintcream);
+    _chord_text.setColour(Label::backgroundColourId, Colours::transparentBlack);
+    _chord_text.setText(" ", dontSendNotification);
+    _chord_text.setJustificationType(Justification::centred);
+    _chord_text.setVisible(false);
+    
+    // Set Timer Callback
+    startTimer(10);
 }
 
 AppView::~AppView() {
@@ -67,7 +96,7 @@ AppView::~AppView() {
 }
 
 void AppView::paint(juce::Graphics &g) {
-    g.fillAll (Colours::white);
+    g.fillAll (Colours::black);
 }
 
 void AppView::resized () {
@@ -80,19 +109,25 @@ void AppView::resized () {
     // Set Buttons
     int button_width = width/10;
     int button_height = height/15;
-    int offset = width/4;
-    _record_button.setBounds(width/2 - button_width/2 - offset, height/4, button_width, button_height);
-    _process_button.setBounds(width/2 - button_width/2 + offset, height/4, button_width, button_height);
-    _play_button.setBounds(width/2 - button_width/2, height/2, button_width, button_height);
+    int offset = width/8;
+    _record_button.setBounds(offset - button_width/2, height/4 - button_height/2, button_width, button_height);
+    _process_button.setBounds(offset - button_width/2, height/2 - button_height/2, button_width, button_height);
+    _play_button.setBounds(offset - button_width/2, 3*height/4 - button_height/2, button_width, button_height);
     
     button_width = width/15;
     button_height = height/20;
     _back_button.setBounds(PADDING, PADDING, button_width, button_height);
     
     // Set Keyboard Component
-    int w = (int)_keyboard_component.getKeyWidth() * (7*7 + 3), h = 70;
+    int w = (int)_keyboard_component.getKeyWidth() * (5*7), h = 70;
     _keyboard_component.setSize(w,h);
-    _keyboard_component.setCentrePosition(width/2, height*3/4);
+    _keyboard_component.setCentrePosition(5*width/8, height*3/4);
+    
+    // Set Labels
+    int label_width = 5*width/8;
+    _metronome_label.setBounds(width/4 + offset, height/4 - button_height, label_width, button_height*2);
+    _instruction_label.setBounds(width/4 + offset, height/2 - button_height, label_width, button_height*2);
+    _chord_text.setBounds(5*width/8 - w/2, height/2 + offset/2, w, button_height);
 }
 
 void AppView::buttonClicked (Button* button) {
@@ -120,6 +155,27 @@ void AppView::buttonClicked (Button* button) {
     }
 }
 
+void AppView::timerCallback() {
+    if (_controller->isPlaying()) {
+        if (_controller->getStopFlag()) {
+            _controller->stopPlayback();
+        }
+        int measure_num = _controller->getMeasureCount();
+        cout << measure_num << endl;
+        if (measure_num >= 0) {
+            //String chord_name = _controller->getChordString(measure_num);
+            _chord_text.setText(String(measure_num), dontSendNotification);
+        }
+        else {
+            _chord_text.setText(" ", dontSendNotification);
+        }
+    }
+    if (_controller->isRecording()) {
+        int display_count = _controller->getBeatCount();
+        _metronome_label.setText("Beat Count: " + String(display_count), dontSendNotification);
+    }
+}
+
 void AppView::displayBackButton(bool is_ready_to_display) {
     _back_button.setEnabled(is_ready_to_display);
     _back_button.setVisible(is_ready_to_display);
@@ -139,17 +195,21 @@ void AppView::setRecordButton(bool is_recording) {
         _record_button.setColour(TextButton::buttonColourId, Colours::lightgreen);
         _record_button.setButtonText("Record");
     }
+    _metronome_label.setVisible(is_recording);
 }
 
 void AppView::displayProcessButton(bool is_ready_to_process) {
     _process_button.setEnabled(is_ready_to_process);
     _process_button.setVisible(is_ready_to_process);
+    _instruction_label.setVisible(is_ready_to_process);
 }
 
 void AppView::displayPlayElements(bool is_ready_to_play) {
     _play_button.setEnabled(is_ready_to_play);
     _play_button.setVisible(is_ready_to_play);
     _keyboard_component.setVisible(is_ready_to_play);
+    if (is_ready_to_play)
+        _instruction_label.setText("Step 3: Hit play button to hear the chords", dontSendNotification);
 }
 
 void AppView::setPlayButton(bool is_playing) {
@@ -161,5 +221,6 @@ void AppView::setPlayButton(bool is_playing) {
         _play_button.setColour(TextButton::buttonColourId, Colours::lightgreen);
         _play_button.setButtonText("Play");
     }
+    _chord_text.setVisible(is_playing);
 }
 

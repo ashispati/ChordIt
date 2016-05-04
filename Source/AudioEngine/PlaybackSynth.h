@@ -3,7 +3,7 @@
 
     PlaybackSynth.h
     Created: 17 Feb 2016 12:20:36am
-    Author:  Som
+    Author:  Ashis Pati
 
   ==============================================================================
 */

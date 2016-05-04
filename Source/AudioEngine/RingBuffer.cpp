@@ -3,7 +3,7 @@
 
     RingBuffer.cpp
     Created: 2 Feb 2016 8:23:18pm
-    Author:  Som
+    Author:  Ashis Pati
 
   ==============================================================================
 */

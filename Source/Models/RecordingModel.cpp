@@ -131,8 +131,15 @@ void RecordingModel::normalizeMelodyObsMatrix(float** melody_obs_mat) {
         for (int note_idx = 0; note_idx < 12; note_idx++) {
             sum += melody_obs_mat[measure_idx][note_idx];
         }
-        for (int note_idx = 0; note_idx < 12; note_idx++) {
-            melody_obs_mat[measure_idx][note_idx] /= sum;
+        if (sum != 0) {
+            for (int note_idx = 0; note_idx < 12; note_idx++) {
+                melody_obs_mat[measure_idx][note_idx] /= sum;
+            }
+        }
+        else {
+            for (int note_idx = 0; note_idx < 12; note_idx++) {
+                melody_obs_mat[measure_idx][note_idx] = 1/12.0;
+            }
         }
     }
 }

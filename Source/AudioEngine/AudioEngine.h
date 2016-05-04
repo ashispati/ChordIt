@@ -3,7 +3,7 @@
 
     AudioEngine.h
     Created: 1 Feb 2016 11:52:40pm
-    Author:  Som
+    Author:  Ashis Pati
 
   ==============================================================================
 */
@@ -59,7 +59,11 @@ public:
     
     void playMetronome (const AudioSourceChannelInfo& buffer_to_fill, int next_beat);
     void playReferencePitch(const juce::AudioSourceChannelInfo& buffer_to_fill, int num_samples);
+    void playChords (const AudioSourceChannelInfo& buffer_to_fill, int next_beat);
     void setPlaybackSynthFreq(double freq_in_hz, int window_length_in_samples);
+    
+    void playNote(int midi_note, float velocity);
+    void stopNote(int midi_note);
 };
 
 

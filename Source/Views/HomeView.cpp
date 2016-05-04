@@ -152,3 +152,4 @@ void HomeView::textEditorFocusLost(TextEditor &text_editor) {
     cout << "New bpm is " << new_bpm << std::endl;
     _bpm_text_editor.setText(s.str());
 }
+

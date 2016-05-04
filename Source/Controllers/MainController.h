@@ -47,6 +47,8 @@ private:
     
     // Playback Status
     bool _is_playing;
+    int _num_samples_played;
+    bool _stop_flag;
 
     
 public:
@@ -57,7 +59,7 @@ public:
     void startRecording();
     void stopRecording();
     bool isRecording();
-    void addSamples(int num_samples);
+    void addRecordingSamples(int num_samples);
     void resetRecording();
     double getRecordingTimeInBeats();
     int getCountInDurationInSamples();
@@ -81,7 +83,16 @@ public:
     void startPlayback();
     void stopPlayback();
     bool isPlaying();
+    void playNote(int num_measure, int note_idx);
+    void stopNote(int num_measure, int note_idx);
+    double getPlaybackTimeInBeats();
+    void addPlaybackSamples(int num_samples);
     void resetPlaybackSynth();
+    void setStopFlag(bool stop_flag);
+    bool getStopFlag() const;
+    int getBeatCount();
+    int getMeasureCount();
+    String getChordString(int measure_num);
 };
 
 

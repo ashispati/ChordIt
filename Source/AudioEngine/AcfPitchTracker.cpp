@@ -3,7 +3,7 @@
 
     AcfPitchTracker.cpp
     Created: 7 Feb 2016 5:37:29pm
-    Author:  Som
+    Author:  Ashis Pati
 
   ==============================================================================
 */
